@@ -38,8 +38,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run verification test suite
+      - name: Run Vitest unit & audit runner tests
         run: npm test
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright button & accessibility audit suite
+        run: npm run test:e2e
 
       - name: Build production bundle
         run: npm run build
