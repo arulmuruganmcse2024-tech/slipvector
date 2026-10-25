@@ -1094,6 +1094,56 @@ body {
   border-width: 0;
 }
 
+/* Persistent Footer */
+.app-footer {
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-subtle);
+  padding: 18px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.footer-link:hover {
+  color: var(--accent-cyan);
+}
+
+.footer-separator {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.footer-disclaimer-text {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  max-width: 900px;
+  line-height: 1.4;
+}
+
+.footer-disclaimer {
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
 /* Global focus-visible indicator for keyboard accessibility (WCAG 2.4.7 / 2.4.11) */
 button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
   outline: 2px solid var(--accent-cyan) !important;

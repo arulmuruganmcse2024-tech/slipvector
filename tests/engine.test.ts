@@ -13,6 +13,7 @@ import {
 import { PRESETS, MOTOR_PROFILES } from '../src/engine/presets.ts';
 import { evaluateStaticChecks, STATIC_CHECK_AA_NAME, STATIC_CHECK_AAA_NAME } from '../src/engine/staticChecks.ts';
 import { solveLayout } from '../src/engine/solver.ts';
+import { generateAuditReceiptJSON } from '../src/ui/exportDrawer.ts';
 
 describe('1. PRNG & Determinism Suite', () => {
   it('guarantees bit-for-bit reproducibility with identical seeds', () => {
@@ -358,5 +359,37 @@ describe('6. Solver Honesty Suite (Solved, No Change Needed, Infeasible)', () =>
     // Physically impossible to separate two 44px buttons with 22px tremor inside 110x70px container
     expect(result.status).toBe('infeasible');
     expect(result.explanation).toContain('restrict maximum clearance');
+  });
+});
+
+describe('7. Export Suite & JSON Receipt Schema Verification', () => {
+  it('generates a valid, parseable JSON audit receipt containing complete scientific metadata', () => {
+    const saasPreset = PRESETS[0];
+    const profile = MOTOR_PROFILES[0];
+    const solverRes = solveLayout(saasPreset.elements, saasPreset.container, profile, 42, 500);
+
+    const jsonStr = generateAuditReceiptJSON({
+      presetName: saasPreset.name,
+      container: saasPreset.container,
+      elementsBefore: saasPreset.elements,
+      elementsAfter: solverRes.optimizedElements,
+      profile,
+      seed: 42,
+      sampleSize: 500,
+      simResult: null,
+      solverResult: solverRes
+    });
+
+    const parsed = JSON.parse(jsonStr);
+    expect(parsed).toHaveProperty('slipvector_audit_receipt');
+    expect(parsed.slipvector_audit_receipt).toHaveProperty('generator');
+    expect(parsed.slipvector_audit_receipt).toHaveProperty('disclaimer');
+    expect(parsed).toHaveProperty('audit_configuration');
+    expect(parsed.audit_configuration.sample_size_trials).toBe(500);
+    expect(parsed).toHaveProperty('empirical_results');
+    expect(parsed.empirical_results.healed).toHaveProperty('status');
+    expect(parsed.empirical_results.healed).toHaveProperty('explanation');
+    expect(parsed).toHaveProperty('scientific_citations');
+    expect(parsed.scientific_citations.length).toBeGreaterThanOrEqual(4);
   });
 });

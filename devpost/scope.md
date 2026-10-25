@@ -29,7 +29,7 @@ Today, teams rely either on static WCAG guidelines (which check individual butto
 ## Inspiration & Identity
 - **Visual Aesthetic**: High-contrast dark human-factors instrumentation console (`#0A0D14` carbon slate, `#111622` panel surfaces, `#1E2638` hairline grids, Alabaster `#F8FAFC`, Emerald `#10B981`, Rose-Crimson `#F43F5E`, Cyan `#06B6D4`).
 - **Inspirations**: Oscilloscope interfaces, aerodynamic wind-tunnel particle tracers, and flight-control telemetry dashboards.
-- **Tone**: Scientifically honest, non-judgmental, transparently parametric, and rigorously grounded in peer-reviewed ergonomics literature.
+- **Tone**: Scientifically honest, non-judgmental, transparently parametric, and parametrically calibrated against baseline pointing literature (MacKenzie 1992).
 
 ## Why This Matters to the Learner
 Static accessibility compliance gives a false sense of security: buttons can strictly satisfy WCAG 2.2 AA (24px) or AAA (44px) target size rules, yet suffer catastrophic misclick rates when placed immediately behind primary targets along natural ballistic approach vectors. Creating an empirical kinetic simulation tool empowers teams to catch motor-variability hazards during design and code review.

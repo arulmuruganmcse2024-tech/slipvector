@@ -61,7 +61,14 @@ export function generateAuditReceiptJSON(config: ExportDataConfig): string {
           lower_bound_percent: (config.solverResult.afterWilsonCI.lower * 100).toFixed(2),
           upper_bound_percent: (config.solverResult.afterWilsonCI.upper * 100).toFixed(2)
         },
-        routine_interaction_time_delta_ms: Math.round(config.solverResult.deltaMTMs)
+        routine_interaction_time_delta_ms: Math.round(config.solverResult.deltaMTMs),
+        nominal_throughput_before_bits_per_sec: config.solverResult.beforeThroughput,
+        nominal_throughput_after_bits_per_sec: config.solverResult.afterThroughput,
+        effective_throughput_before_bits_per_sec: config.solverResult.effectiveThroughputBefore,
+        effective_throughput_after_bits_per_sec: config.solverResult.effectiveThroughputAfter,
+        primary_hits_before: config.solverResult.beforePrimaryHits,
+        primary_hits_after: config.solverResult.afterPrimaryHits,
+        explanation: config.solverResult.explanation
       } : null
     },
     layout_geometry: {
@@ -76,7 +83,8 @@ export function generateAuditReceiptJSON(config: ExportDataConfig): string {
       'Fitts, P. M. (1954). The information capacity of the human motor system in controlling the amplitude of movement.',
       'Schmidt, R. A., et al. (1979). Motor-output variability: A theory for the accuracy of rapid motor acts.',
       'Meyer, D. E., et al. (1988). Optimality in human motor performance: Ideal rapidly aimed movements.',
-      'MacKenzie, I. S. (1992). Fitts\' law as a research and design tool in human-computer interaction.'
+      'MacKenzie, I. S. (1992). Fitts\' law as a research and design tool in human-computer interaction.',
+      'Soukoreff, R. W., & MacKenzie, I. S. (2004). Towards a standard for pointing device evaluation, perspectives on 27 years of Fitts\' law research in HCI.'
     ]
   };
 

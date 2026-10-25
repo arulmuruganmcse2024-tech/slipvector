@@ -2,10 +2,10 @@
 
 > **Browser-Native Kinetic UI Misclick & Motor-Variability Stress Auditor**  
 > *Submitted to the Devpost "Build With AI: Basics" Hackathon*  
-> **Live Demo URL:** `https://<your-live-deployment-url>.vercel.app` *(Production deployment: [slipvector.vercel.app](https://slipvector.vercel.app) or run locally via `npm run preview`)*
+> **Live Demo URL:** [https://arulmuruganmcse2024-tech.github.io/slipvector/](https://arulmuruganmcse2024-tech.github.io/slipvector/) *(or run locally via `npm run preview`)*
 
 [![Verification Status](https://img.shields.io/badge/Vitest-17%2F17%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
-[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-0%20Violations-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
+[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-No%20Violations%20Detected-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
 [![WCAG 2.2](https://img.shields.io/badge/WCAG%202.2-SC%202.5.8%20%7C%20SC%202.5.5-06B6D4?style=flat-square)](src/engine/staticChecks.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](LICENSE)
 

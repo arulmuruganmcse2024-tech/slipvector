@@ -43,7 +43,7 @@ Source: `scope.md > The Unique Kernel`.
 - **Theme**: Precision human-factors instrumentation console. Deep carbon slate (`#0A0D14`), panel surfaces (`#111622`), crisp structural borders (`#1E2638`), Alabaster typography (`#F8FAFC`), steel labels (`#94A3B8`).
 - **Accents**: Emerald (`#10B981` — Primary Hit / Safe), Amber (`#F59E0B` — Neutral / Warning), Rose-Crimson (`#F43F5E` — Destructive / Collision), Electric Cyan (`#06B6D4` — Active focus / Tracers).
 - **Typography**: Inter / system geometric sans for UI interface copy + `JetBrains Mono` (`tabular-nums`) for all numbers, coordinates, confidence intervals, and metrics.
-- **Accessibility**: 100% WCAG AA 4.5:1 text-to-background contrast; full `prefers-reduced-motion` compliance (static scatter view without continuous particle movement); zero flashing above 3 Hz.
+- **Accessibility**: Evaluated against WCAG AA 4.5:1 text-to-background contrast; full `prefers-reduced-motion` support (static scatter view without continuous particle movement); no flashing content above 3 Hz.
 
 ## Features and Behavior
 
@@ -149,7 +149,7 @@ Computes trade-offs across 4 UX patterns:
 
 ## Product Decisions
 - **Web Worker Architecture**: Ensures smooth 60 FPS canvas animation without main thread jank during 10,000-trial runs.
-- **Sandboxed `srcdoc` iframe**: Guarantees zero script injection risks while allowing DOM bounding box extraction.
+- **Sandboxed `srcdoc` iframe**: Scripts safely restricted via sandboxed iframe headers while allowing DOM bounding box extraction.
 - **Statistical Rigor**: Never displays "0% risk" without reporting the Wilson 95% CI upper bound.
 
 ## Non-Goals

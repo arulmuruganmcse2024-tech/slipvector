@@ -1,6 +1,6 @@
 # SlipVector — Interface Self-Dogfooding Audit
 
-> **Audit Policy**: SlipVector strictly tests its own user interface against both static accessibility guidelines (WCAG 2.2 SC 2.5.8 AA at ≥24px, WCAG 2.2 SC 2.5.5 AAA at ≥44px) and kinetic motor-variability simulation. An interface is only certified as **"Passes its own audit"** if 100% of adjacent control pairs pass without accidental destructive hazards or cramping.
+> **Audit Policy**: SlipVector evaluates its own user interface against both static accessibility guidelines (WCAG 2.2 SC 2.5.8 AA at ≥24px, WCAG 2.2 SC 2.5.5 AAA at ≥44px) and kinetic motor-variability simulation. An interface is certified as **"Passes its own audit"** when all tested adjacent control pairs pass without accidental destructive hazards or cramping under simulation.
 
 ---
 
@@ -32,7 +32,7 @@ The following table documents every adjacent control pair across all application
 ## Dogfood Conclusion
 
 - **Total Adjacent Control Pairs Audited**: 16
-- **Static WCAG 2.2 AA (≥24px) Pass Rate**: 16 / 16 (100.0%)
-- **Static WCAG 2.2 AAA (≥44px) Pass Rate**: 16 / 16 (100.0%)
-- **Accidental Destructive Collisions**: 0 across all pairs
-- **Certification**: SlipVector **passes its own audit** with 100% compliance.
+- **Static WCAG 2.2 AA (≥24px) Pass Rate**: 16 / 16
+- **Static WCAG 2.2 AAA (≥44px) Pass Rate**: 16 / 16
+- **Accidental Destructive Collisions**: 0 across all tested pairs
+- **Certification**: SlipVector **passes its own audit** with no automated violations detected in our checks.

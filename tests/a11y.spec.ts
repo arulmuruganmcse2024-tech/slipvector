@@ -20,7 +20,7 @@ test.describe('Accessibility & Keyboard Verification Suite (Axe-Core & Assistive
     }
 
     expect(criticalOrSerious).toEqual([]);
-    console.log(`✓ Axe-core audit passed with 0 serious/critical violations across ${accessibilityScanResults.passes.length} verified rules.`);
+    console.log(`✓ No automated axe-core violations detected (automated checks cover a subset of WCAG criteria) across ${accessibilityScanResults.passes.length} verified rules.`);
   });
 
   test('2. Keyboard-only navigation flow operates smoothly without focus traps', async ({ page }) => {
