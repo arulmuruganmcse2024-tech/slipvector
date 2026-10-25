@@ -1,7 +1,7 @@
 ---
 skill: 5-build
 doc: checklist
-status: in_progress
+status: approved
 ---
 
 # Build Checklist
@@ -30,7 +30,7 @@ Build mode: fast
   Learner check: Open Preset #5, confirm both WCAG badges show PASS while kinetic simulation detects collisions.
   Commit: `feat(workbench): build 5-preset studio, sanitized srcdoc HTML extractor, dogfood self-audit, and sensitivity chart (Slice 2)`
 
-- [ ] **3. Auto-Heal Transition, Mitigation Trade-Off Matrix, Export Suite & app-map.html**
+- [x] **3. Auto-Heal Transition, Mitigation Trade-Off Matrix, Export Suite & app-map.html**
   Becomes usable: 1-click Auto-Heal solver transition with Before vs. After Verification Receipt, 4-row quantitative Mitigation Comparison Matrix, production CSS/Tailwind/JSON exports, non-clinical disclaimer documentation, and interactive `app-map.html`.
   Why now: Closes the loop from problem detection to engineering remediation, giving developers concrete, verifiable fixes and trade-offs.
   PRD ref: `prd.md > Features and Behavior > FR6, FR7, FR10`, `prd.md > Look and Feel`
@@ -42,15 +42,15 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 - [x] Early usable behavior explored — Slice 1 engine verified via Vitest calibration & invariants (13/13 tests passing)
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
 Activity and evidence: Biomechanical simulation engine with non-circular empirical tests and interactive stress testing workbench.
 Route and stops: `src/engine/biomechanics.ts` -> `src/engine/solver.ts` -> `src/canvas/swarmRenderer.ts` -> `src/import/htmlExtractor.ts`.

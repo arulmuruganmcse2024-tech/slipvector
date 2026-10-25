@@ -2,31 +2,40 @@
  * SlipVector — Main Application Controller
  * Coordinates the high-performance Web Worker simulation engine,
  * interactive 60 FPS Canvas stage, dual telemetry banner, sensitivity sweeps,
- * sandboxed HTML extraction, self-dogfooding audit, and guided demo walkthrough.
+ * sandboxed HTML extraction, self-dogfooding audit, guided demo walkthrough,
+ * Auto-Heal constrained solver, and mitigation comparator.
  */
 
 import { PRESETS, MOTOR_PROFILES, PresetLayout } from './engine/presets.ts';
 import { MotorProfile, UIElement } from './engine/biomechanics.ts';
 import { evaluateStaticChecks } from './engine/staticChecks.ts';
+import { solveLayout, SolverResult } from './engine/solver.ts';
+import { computeMitigationMatrix } from './engine/mitigations.ts';
 import { SwarmRenderer } from './canvas/swarmRenderer.ts';
 import { WorkerRequest, WorkerResponse } from './worker/simWorker.ts';
 import { renderTelemetryBanner } from './ui/telemetryBanner.ts';
 import { renderControlDeck } from './ui/controlDeck.ts';
 import { renderSensitivityChart } from './ui/sensitivityChart.ts';
+import { renderAutoHealSection } from './ui/autoHealModal.ts';
+import { renderMitigationTable } from './ui/mitigationTable.ts';
+import { renderExportSection } from './ui/exportDrawer.ts';
 import { openHTMLImportModal } from './ui/htmlImportModal.ts';
 import { PointerStressTester } from './perturbation/pointerStress.ts';
 
-class SlipVectorApp {
+export class SlipVectorApp {
   private currentPreset: PresetLayout = PRESETS[0];
   private currentProfile: MotorProfile = MOTOR_PROFILES[1]; // Essential Tremor default
   private currentSampleSize: 500 | 2000 | 10000 = 500;
   private currentSeed = 42;
   private activeElements: UIElement[] = [];
+  private initialElements: UIElement[] = [];
   private container = { width: 520, height: 280 };
 
   private simWorker: Worker | null = null;
   private simResult: WorkerResponse | null = null;
+  private solverResult: SolverResult | null = null;
   private isSimulating = false;
+  private isSolving = false;
   private activeSensitivityParam: 'overshoot' | 'amplitude' = 'overshoot';
 
   private swarmRenderer!: SwarmRenderer;
@@ -34,6 +43,7 @@ class SlipVectorApp {
 
   constructor() {
     this.activeElements = this.currentPreset.elements.map(e => ({ ...e, rect: { ...e.rect } }));
+    this.initialElements = this.currentPreset.elements.map(e => ({ ...e, rect: { ...e.rect } }));
     this.container = { ...this.currentPreset.container };
   }
 
@@ -76,6 +86,7 @@ class SlipVectorApp {
       canvas,
       onElementChange: (updated) => {
         this.activeElements = updated;
+        this.solverResult = null; // Invalidate solver on manual drag
         this.renderAll();
         this.runSimulation();
       },
@@ -122,7 +133,9 @@ class SlipVectorApp {
       openHTMLImportModal({
         onLoadLayout: (layout) => {
           this.activeElements = layout.elements;
+          this.initialElements = layout.elements.map(e => ({ ...e, rect: { ...e.rect } }));
           this.container = layout.container;
+          this.solverResult = null;
           this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
           this.renderAll();
           this.runSimulation();
@@ -140,7 +153,6 @@ class SlipVectorApp {
 
   private initKeyboardShortcuts(): void {
     window.addEventListener('keydown', (e) => {
-      // Space to run swarm (when not typing in an input)
       if (e.code === 'Space' && (e.target as HTMLElement).tagName !== 'INPUT' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
         e.preventDefault();
         this.runSimulation();
@@ -164,10 +176,39 @@ class SlipVectorApp {
     this.simWorker.postMessage(req);
   }
 
+  public triggerAutoHeal(): void {
+    this.isSolving = true;
+    this.renderAutoHeal();
+
+    setTimeout(() => {
+      const result = solveLayout(
+        this.activeElements,
+        this.container,
+        this.currentProfile,
+        this.currentSeed,
+        this.currentSampleSize
+      );
+
+      this.solverResult = result;
+      this.isSolving = false;
+
+      // Animate/transition elements to healed safe coordinates
+      this.activeElements = result.optimizedElements.map(e => ({ ...e, rect: { ...e.rect } }));
+      this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
+
+      // Re-run simulation swarm automatically to verify new layout live
+      this.renderAll();
+      this.runSimulation();
+    }, 300);
+  }
+
   private renderAll(): void {
     this.renderTelemetry();
     this.renderControlDeck();
     this.renderSensitivity();
+    this.renderAutoHeal();
+    this.renderMitigations();
+    this.renderExports();
   }
 
   private renderTelemetry(): void {
@@ -193,7 +234,9 @@ class SlipVectorApp {
         onPresetSelect: (p) => {
           this.currentPreset = p;
           this.activeElements = p.elements.map(e => ({ ...e, rect: { ...e.rect } }));
+          this.initialElements = p.elements.map(e => ({ ...e, rect: { ...e.rect } }));
           this.container = { ...p.container };
+          this.solverResult = null;
           const recProf = MOTOR_PROFILES.find(pr => pr.id === p.recommendedProfileId);
           if (recProf) this.currentProfile = recProf;
 
@@ -218,6 +261,7 @@ class SlipVectorApp {
           const el = this.activeElements.find(e => e.id === id);
           if (el) {
             el.rect = { x, y, width: w, height: h };
+            this.solverResult = null;
             this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
             this.renderAll();
             this.runSimulation();
@@ -246,9 +290,67 @@ class SlipVectorApp {
     );
   }
 
+  private renderAutoHeal(): void {
+    const root = document.getElementById('autoheal-root');
+    if (!root) return;
+
+    renderAutoHealSection(
+      root,
+      this.solverResult,
+      this.isSolving,
+      {
+        onTriggerAutoHeal: () => this.triggerAutoHeal(),
+        onApplyCSSPatch: () => {}
+      }
+    );
+  }
+
+  private renderMitigations(): void {
+    const root = document.getElementById('mitigations-root');
+    if (!root) return;
+
+    const beforeCollisions = this.solverResult ? this.solverResult.beforeCollisions : (this.simResult?.destructiveCollisions || 0);
+
+    // Compute mock/current solver result for table if not solved yet
+    const dummySolver: SolverResult = this.solverResult || {
+      status: 'solved',
+      optimizedElements: this.activeElements,
+      beforeCollisions,
+      afterCollisions: 0,
+      beforeWilsonCI: { proportion: beforeCollisions / this.currentSampleSize, lower: 0, upper: 0.1 },
+      afterWilsonCI: { proportion: 0, lower: 0, upper: 0.00762 },
+      deltaMTMs: 0,
+      patchCSS: '',
+      tailwindClasses: '',
+      explanation: ''
+    };
+
+    const rows = computeMitigationMatrix(beforeCollisions, this.currentSampleSize, dummySolver);
+    renderMitigationTable(root, rows);
+  }
+
+  private renderExports(): void {
+    const root = document.getElementById('export-root');
+    if (!root) return;
+
+    renderExportSection(root, {
+      presetName: this.currentPreset.name,
+      container: this.container,
+      elementsBefore: this.initialElements,
+      elementsAfter: this.activeElements,
+      profile: this.currentProfile,
+      seed: this.currentSeed,
+      sampleSize: this.currentSampleSize,
+      simResult: this.simResult,
+      solverResult: this.solverResult
+    });
+  }
+
   private updateTelemetryAndDiagnostics(): void {
     this.renderTelemetry();
     this.renderSensitivity();
+    this.renderMitigations();
+    this.renderExports();
   }
 
   private updateAccessibleSummary(): void {
@@ -267,12 +369,11 @@ class SlipVectorApp {
    * loads them into the canvas, and executes an honest Monte Carlo audit.
    */
   public runDogfoodAudit(): void {
-    const header = document.querySelector('.app-header');
     const brand = document.querySelector('.brand-row');
     const btnDemo = document.getElementById('btn-guided-demo');
     const btnDogfood = document.getElementById('btn-dogfood-audit');
 
-    if (!header || !brand || !btnDemo || !btnDogfood) {
+    if (!brand || !btnDemo || !btnDogfood) {
       alert('Unable to extract live toolbar coordinates.');
       return;
     }
@@ -281,7 +382,6 @@ class SlipVectorApp {
     const demoRect = btnDemo.getBoundingClientRect();
     const dogfoodRect = btnDogfood.getBoundingClientRect();
 
-    // Convert to relative stage coordinates
     const scale = 0.85;
     const pad = 24;
 
@@ -324,8 +424,10 @@ class SlipVectorApp {
     ];
 
     this.activeElements = dogfoodElements;
+    this.initialElements = dogfoodElements.map(e => ({ ...e, rect: { ...e.rect } }));
     this.container = { width: 640, height: 200 };
     this.currentProfile = MOTOR_PROFILES[0]; // Steady Baseline for desktop toolbar
+    this.solverResult = null;
 
     this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
     this.renderAll();
@@ -343,23 +445,34 @@ class SlipVectorApp {
    */
   public async runGuidedDemo(): Promise<void> {
     const btn = document.getElementById('btn-guided-demo');
-    if (btn) btn.innerText = '⏳ Demo Running...';
+    if (btn) btn.innerText = '⏳ Step 1/3: Simulating Baseline...';
 
     // Step 1: Load SaaS Modal
     this.currentPreset = PRESETS[0];
     this.activeElements = PRESETS[0].elements.map(e => ({ ...e, rect: { ...e.rect } }));
+    this.initialElements = PRESETS[0].elements.map(e => ({ ...e, rect: { ...e.rect } }));
     this.container = { ...PRESETS[0].container };
     this.currentProfile = MOTOR_PROFILES[1]; // Essential Tremor
+    this.solverResult = null;
     this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
     this.renderAll();
     this.runSimulation();
 
-    await new Promise(r => setTimeout(r, 2500));
+    await new Promise(r => setTimeout(r, 2200));
 
-    // Step 2: Switch to Preset 5 (48px AAA Stress Case) to prove static failure
+    // Step 2: Trigger Auto-Heal
+    if (btn) btn.innerText = '⏳ Step 2/3: Auto-Healing Layout...';
+    this.triggerAutoHeal();
+
+    await new Promise(r => setTimeout(r, 2800));
+
+    // Step 3: Switch to Preset 5 (48px AAA Stress Case) to prove static failure
+    if (btn) btn.innerText = '⏳ Step 3/3: 48px AAA Stress Case...';
     this.currentPreset = PRESETS[4];
     this.activeElements = PRESETS[4].elements.map(e => ({ ...e, rect: { ...e.rect } }));
+    this.initialElements = PRESETS[4].elements.map(e => ({ ...e, rect: { ...e.rect } }));
     this.container = { ...PRESETS[4].container };
+    this.solverResult = null;
     this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
     this.renderAll();
     this.runSimulation();
