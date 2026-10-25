@@ -2,7 +2,9 @@
 
 ## 🎥 Protocol Demo
 
-[![SlipVector Demo](https://img.youtube.com/vi/mPVSkuuNzAs/hqdefault.jpg)](https://youtu.be/mPVSkuuNzAs)
+<a href="https://youtu.be/mPVSkuuNzAs" target="_blank">
+  <img src="./assets/thumbnail.png" width="100%" alt="SlipVector Protocol Demo - Click to Watch">
+</a>
 
 > Build With AI: Basics Hackathon Submission  
 > Track Alignment: Browser-Native Kinetic UI Accessibility & Monte Carlo Stress Auditing  
