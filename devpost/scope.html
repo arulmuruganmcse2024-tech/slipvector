@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlipVector — Project Scope Companion</title>
+  <style>
+    :root {
+      --bg: #0A0D14;
+      --card: #111622;
+      --border: #1E2638;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --emerald: #10B981;
+      --crimson: #F43F5E;
+      --cyan: #06B6D4;
+      --amber: #F59E0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .subtitle { color: var(--muted); font-size: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    h2 { font-size: 20px; margin-bottom: 16px; color: var(--cyan); display: flex; align-items: center; gap: 8px; }
+    ul { list-style: none; padding-left: 0; }
+    li { margin-bottom: 12px; padding-left: 20px; position: relative; }
+    li::before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+    .metric-card {
+      background: rgba(30, 38, 56, 0.4);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 8px;
+    }
+    .metric-card h3 { font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+    .metric-card p { font-size: 15px; color: var(--text); }
+    .cut-tag { color: var(--crimson); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Approved Scope Artifact</span>
+      <h1>SlipVector</h1>
+      <p class="subtitle">A browser-native kinetic UI misclick and motor-variability stress auditor</p>
+    </header>
+
+    <div class="card">
+      <h2>The Unique Kernel</h2>
+      <div class="grid">
+        <div class="metric-card">
+          <h3>Coupled Biomechanical Monte Carlo</h3>
+          <p>Unifies MacKenzie's (1992) Shannon Fitts Law, Meyer et al. (1988) impulse variability along the approach-vector frame, and continuous Ornstein-Uhlenbeck motor oscillation in a Web Worker.</p>
+        </div>
+        <div class="metric-card">
+          <h3>Constrained Repulsive Solver (Auto-Heal)</h3>
+          <p>Dynamically displaces destructive actions orthogonal to the approach vector, expands hitboxes toward &ge;44px, and verifies 0/N risk or reports infeasibility.</p>
+        </div>
+      </div>
+      <div class="metric-card" style="margin-top: 16px;">
+        <h3>Quantitative Mitigation Matrix</h3>
+        <p>Directly compares Spatial Layout Separation against Undo Toast, 2-Step Overflow Menu, and Confirmation Modal on residual collision rate ($k/N$ + Wilson 95% CI) and interaction time tax.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Who It's For & Why It Matters</h2>
+      <p>Frontend developers, accessibility specialists, and builders using AI coding agents that place destructive actions next to primary actions. Static WCAG 2.2 rules only evaluate button sizes in isolation without accounting for approach vectors, directional overshoot, or tremor.</p>
+    </div>
+
+    <div class="card">
+      <h2>The POC Boundary</h2>
+      <div class="grid">
+        <div>
+          <h3 style="color: var(--emerald); margin-bottom: 12px;">In Scope</h3>
+          <ul>
+            <li>5 Presets (including 48px WCAG AAA Stress Case)</li>
+            <li>Paste-Your-Own Sandboxed HTML/CSS Inspector</li>
+            <li>Self-Dogfooding live toolbar audit</li>
+            <li>Interactive Drag & Resize stage with 60 FPS Swarm</li>
+            <li>Wilson Score 95% Confidence Intervals</li>
+            <li>Auto-Heal Constrained Solver</li>
+            <li>Mitigation Trade-Off Comparator</li>
+            <li>Interactive Sensitivity Sweep Chart</li>
+            <li>CSS / Tailwind / JSON Audit Receipt Export</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--crimson); margin-bottom: 12px;">Explicitly Cut</h3>
+          <ul>
+            <li><span class="cut-tag">Cross-Origin Scraping:</span> Blocked by browser CORS / security policies.</li>
+            <li><span class="cut-tag">Hardware Gaze/Eye Tracking:</span> Exceeds browser standard peripheral APIs.</li>
+            <li><span class="cut-tag">OS Cursor Driver Hooks:</span> Outside browser sandbox capabilities.</li>
+            <li><span class="cut-tag">Clinical Diagnoses:</span> Purely ergonomic screening; non-clinical disclaimer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

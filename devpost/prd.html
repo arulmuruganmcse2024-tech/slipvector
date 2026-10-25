@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlipVector — Product Requirements Document Companion</title>
+  <style>
+    :root {
+      --bg: #0A0D14;
+      --card: #111622;
+      --border: #1E2638;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --emerald: #10B981;
+      --crimson: #F43F5E;
+      --cyan: #06B6D4;
+      --amber: #F59E0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .subtitle { color: var(--muted); font-size: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    h2 { font-size: 20px; margin-bottom: 16px; color: var(--cyan); }
+    h3 { font-size: 16px; margin: 16px 0 8px 0; color: #fff; }
+    .req-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .req-item {
+      background: rgba(30, 38, 56, 0.35);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .req-item h4 {
+      color: var(--emerald);
+      font-size: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .req-item p { font-size: 13.5px; color: var(--muted); }
+    .highlight { color: #fff; font-weight: 500; }
+    ol { padding-left: 20px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; font-size: 14.5px; color: var(--muted); }
+    li strong { color: #fff; }
+    .disclaimer-banner {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--amber);
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Approved PRD Artifact</span>
+      <h1>SlipVector — Product Requirements</h1>
+      <p class="subtitle">Detailed behavioral specification, 5 presets, sandboxed extraction, and solver architecture</p>
+    </header>
+
+    <div class="card">
+      <h2>The Core Journey</h2>
+      <ol>
+        <li><strong>Landing & Orientation:</strong> Interactive console with 10-Second Guided Demo button.</li>
+        <li><strong>Select Preset:</strong> 5 presets including 48px WCAG AAA Stress Case that defeats static strawmen.</li>
+        <li><strong>Dual Telemetry:</strong> Side-by-side display of static WCAG checks vs. kinetic Monte Carlo collision rates ($k/N$ + Wilson 95% CI).</li>
+        <li><strong>Visual Swarm:</strong> 60 FPS Canvas rendering trajectories, scatter markers, approach cone covariance ellipse, and Gaussian heatmap.</li>
+        <li><strong>Sensitivity Analysis:</strong> Real-time sweep across overshoot ratio $\sigma_\parallel/\sigma_\perp$ and tremor amplitude.</li>
+        <li><strong>Auto-Heal Solver:</strong> Repulsive layout solver computes certified safe coordinates and validates $0/N$ via re-simulation.</li>
+        <li><strong>Mitigation Trade-Offs:</strong> Quantitative comparison against Undo Toast, Overflow Menu, and Confirmation Modal.</li>
+        <li><strong>Export & Dogfood:</strong> Copy CSS/Tailwind patches, download JSON audit receipt, or audit SlipVector's live toolbar.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>Functional Requirements Matrix</h2>
+      <div class="req-grid">
+        <div class="req-item">
+          <h4>FR1: 5 Built-in Presets</h4>
+          <p>SaaS Modal (28px), Mobile Commuter (2.5Hz sway), Clinical Keypad, Git PR Bar, and <span class="highlight">48px WCAG AAA Stress Case</span> where targets pass static checks but collide kinetically.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR2: Sandboxed HTML Inspector</h4>
+          <p>Extracts interactive elements via <span class="highlight">&lt;iframe sandbox="allow-same-origin" srcdoc="..."&gt;</span> with semantic role classification and role overrides.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR3: Self-Dogfooding Audit</h4>
+          <p>1-click button to extract live dimensions of SlipVector's own toolbar controls and prove 0/500 collisions.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR4: Parametric Motor Profiles</h4>
+          <p>Steady Baseline, 4–8 Hz Essential Tremor, 2.5 Hz Transit Sway, Parkinsonian model approximation, and One-Handed Reach.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR5: Visual Telemetry Canvas</h4>
+          <p>Animated trajectories, covariance ellipses, shape-coded scatter markers, Gaussian heatmap, and <span class="highlight">prefers-reduced-motion</span> support.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR6: Constrained Auto-Heal Solver</h4>
+          <p>Displaces destructive elements orthogonal to approach vector and expands targets; reports <span class="highlight">solved</span> or honest <span class="highlight">infeasible</span> bound.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR7: Mitigation Matrix</h4>
+          <p>Compares Spatial Separation vs. Undo Toast vs. 2-Step Overflow vs. Confirmation Dialog on collision risk and interaction time.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR8: Sensitivity Sweep</h4>
+          <p>Real-time mini-chart across overshoot ratio (1.0 to 2.5) and oscillation amplitude (0 to 20px) with Wilson 95% error bars.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR9: Opt-In Perturbation Mode</h4>
+          <p>Direct in-browser cursor perturbation test for hands-on ergonomic stress feeling with Esc key dismissal.</p>
+        </div>
+        <div class="req-item">
+          <h4>FR10: Measured Telemetry & Export</h4>
+          <p>Reports live Web Worker execution time in ms; exports production CSS patches, Tailwind classes, and JSON audit receipts.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer-banner">
+      <strong>Ergonomic Screening Disclaimer:</strong> Model-based ergonomic screening tool using parametric pointing models; not a clinical diagnostic instrument or a substitute for usability testing with human participants.
+    </div>
+  </div>
+</body>
+</html>

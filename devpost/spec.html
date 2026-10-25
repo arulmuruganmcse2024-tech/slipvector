@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlipVector — Technical Specification Companion</title>
+  <style>
+    :root {
+      --bg: #0A0D14;
+      --card: #111622;
+      --border: #1E2638;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --emerald: #10B981;
+      --crimson: #F43F5E;
+      --cyan: #06B6D4;
+      --amber: #F59E0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .subtitle { color: var(--muted); font-size: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    h2 { font-size: 20px; margin-bottom: 16px; color: var(--cyan); }
+    h3 { font-size: 16px; margin: 16px 0 8px 0; color: #fff; }
+    pre {
+      background: #06080D;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      color: #38BDF8;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .arch-box {
+      background: rgba(30, 38, 56, 0.3);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 8px;
+    }
+    .arch-box h4 { color: var(--emerald); font-size: 14px; margin-bottom: 8px; }
+    .arch-box p { font-size: 13.5px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Approved Technical Spec</span>
+      <h1>SlipVector — Technical Architecture</h1>
+      <p class="subtitle">Web Worker Monte Carlo engine, TypeScript biomechanics pipeline, and constrained solver</p>
+    </header>
+
+    <div class="card">
+      <h2>Biomechanical Pipeline Architecture</h2>
+      <div class="grid">
+        <div class="arch-box">
+          <h4>1. PRNG & Seeds</h4>
+          <p>Deterministic <code>mulberry32</code> generator and Box-Muller Gaussian sampling with bit-for-bit reproducibility across runs.</p>
+        </div>
+        <div class="arch-box">
+          <h4>2. MacKenzie Shannon Fitts</h4>
+          <p>$ID = \log_2(D/W + 1)$, calibrated $a=150$ms, $b=135$ms/bit, yielding throughput $TP \in [3.0, 6.5]$ bits/s matching empirical mouse literature.</p>
+        </div>
+        <div class="arch-box">
+          <h4>3. Meyer Impulse Scatter</h4>
+          <p>Approach vector rotation $\hat{\mathbf{u}}$ with $\sigma_\perp = k_{\text{aim}} \cdot D \cdot u$ and $\sigma_\parallel = \rho_{\text{overshoot}} \cdot \sigma_\perp$, strictly decoupling target width from cursor noise.</p>
+        </div>
+        <div class="arch-box">
+          <h4>4. Continuous Tremor</h4>
+          <p>Ornstein-Uhlenbeck stochastic drift plus sinusoidal oscillation $\mathbf{\eta}(t)$ integrated through transit and 90ms actuation dwell.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Mathematical Formulations</h2>
+      <pre>
+1. MacKenzie (1992) Shannon Formulation:
+   ID = log2(D / W + 1)
+   MT = a + b * ID
+   TP = ID / MT
+
+2. Approach Vector & Orthogonal Basis:
+   u_hat = (x_target - x_anchor) / ||x_target - x_anchor||
+   v_hat = (-u_y, u_x)
+
+3. Meyer et al. (1988) Ballistic Endpoint Noise:
+   sigma_perp     = k_aim * D * urgency
+   sigma_parallel = rho_overshoot * sigma_perp
+
+4. Wilson Score 95% Confidence Interval:
+   p_hat = k / n
+   Center = (p_hat + z^2 / (2n)) / (1 + z^2 / n)
+   Margin = (z / (1 + z^2 / n)) * sqrt(p_hat * (1 - p_hat) / n + z^2 / (4n^2))
+      </pre>
+    </div>
+
+    <div class="card">
+      <h2>Module Map</h2>
+      <pre>
+src/
+├── engine/
+│   ├── prng.ts          # Deterministic mulberry32 & Gaussian generator
+│   ├── stats.ts         # Wilson Score 95% CI & statistical aggregations
+│   ├── biomechanics.ts  # Fitts's Law, Meyer scatter, Ornstein-Uhlenbeck tremor
+│   ├── staticChecks.ts  # WCAG 2.2 SC 2.5.8 (24px) & SC 2.5.5 (44px) checks
+│   ├── presets.ts       # 5 realistic UI presets (including 48px AAA stress case)
+│   ├── solver.ts        # Constrained repulsive optimizer (Solved vs Infeasible)
+│   └── mitigations.ts   # Spatial vs Undo Toast vs Overflow vs Confirm Modal
+├── worker/
+│   └── simWorker.ts     # Off-thread Web Worker with Float32Array zero-copy buffers
+├── canvas/
+│   ├── swarmRenderer.ts # 60 FPS trajectory particles, scatter shapes, ellipses
+│   └── heatmap.ts       # 2D Gaussian hazard density heatmap overlay
+└── import/
+    └── htmlExtractor.ts # Sandboxed srcdoc iframe DOM geometry & role extractor
+      </pre>
+    </div>
+  </div>
+</body>
+</html>
