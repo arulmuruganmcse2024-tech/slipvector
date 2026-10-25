@@ -114,7 +114,7 @@ export function generateDeterministicDiagnostic(
   // Alignment check
   if (cosAngle > 0.7) {
     reasons.push(
-      `Destructive target is directly aligned with the approach path (alignment angle ${alignmentAngleDeg}°). Ballistic overshoot along $\\hat{\\mathbf{u}}$ carries the pointer straight into the danger zone.`
+      `Destructive target is directly aligned with the approach path (alignment angle ${alignmentAngleDeg}°). Ballistic overshoot along approach vector (û) carries the pointer straight into the danger zone.`
     );
   } else if (cosAngle > 0.2) {
     reasons.push(

@@ -91,7 +91,7 @@ export function renderControlDeck(
             <span class="slider-value font-mono" id="val-overshoot">${currentProfile.overshootRatio.toFixed(2)}x</span>
           </div>
           <input type="range" id="slider-overshoot" aria-label="Directional Overshoot Ratio" min="1.0" max="2.5" step="0.05" value="${currentProfile.overshootRatio}" class="range-slider" />
-          <div class="slider-subtext">Directional dispersion along approach vector $\hat{\mathbf{u}}$</div>
+          <div class="slider-subtext">Directional dispersion along approach vector (û)</div>
         </div>
 
         <!-- Oscillation Frequency -->
