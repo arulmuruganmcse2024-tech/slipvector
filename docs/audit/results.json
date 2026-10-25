@@ -1,0 +1,167 @@
+[
+  {
+    "preset_id": "saas-modal",
+    "preset_name": "1. SaaS Settings Modal",
+    "motor_profile": "Essential-Tremor-Like Oscillation (6 Hz)",
+    "sample_size": 10000,
+    "seed": 42,
+    "baseline": {
+      "primary_hits": 8278,
+      "primary_rate_percent": 82.78,
+      "destructive_collisions": 128,
+      "destructive_rate_percent": 1.28,
+      "destructive_wilson_ci": {
+        "lower_percent": 1.08,
+        "upper_percent": 1.52
+      },
+      "neutral_misses": 1594,
+      "neutral_rate_percent": 15.94,
+      "partition_sum": 10000,
+      "mean_mt_ms": 538,
+      "mean_id_bits": 2.91,
+      "nominal_throughput_bits_per_sec": 5.4,
+      "effective_width_px": 45,
+      "effective_throughput_bits_per_sec": 5.13
+    },
+    "auto_heal": {
+      "status": "solved",
+      "after_collisions": 0,
+      "after_primary_hits": 9465,
+      "after_mt_ms": 524,
+      "delta_mt_ms": -14,
+      "explanation": "Relocated 'Delete Workspace' by 126px (dx: +20px, dy: -124px to [394, 16]), expanded 'Save Changes' target to 44x44px (+16px), expanding edge-to-edge gap from 4px to 82px. Residual hazard: 0 / 10000 collisions (95% CI upper bound: 0.04%). Primary hit rate: 82.8% -> 94.7%. Routine MT: -14 ms (538 ms -> 524 ms; ID: 2.91 -> 2.80 bits)."
+    }
+  },
+  {
+    "preset_id": "mobile-checkout",
+    "preset_name": "2. Mobile Commuter Checkout",
+    "motor_profile": "Transit Sway & Jolt (~2.5 Hz)",
+    "sample_size": 10000,
+    "seed": 42,
+    "baseline": {
+      "primary_hits": 8591,
+      "primary_rate_percent": 85.91,
+      "destructive_collisions": 260,
+      "destructive_rate_percent": 2.6,
+      "destructive_wilson_ci": {
+        "lower_percent": 2.31,
+        "upper_percent": 2.93
+      },
+      "neutral_misses": 1149,
+      "neutral_rate_percent": 11.49,
+      "partition_sum": 10000,
+      "mean_mt_ms": 538,
+      "mean_id_bits": 2.91,
+      "nominal_throughput_bits_per_sec": 5.4,
+      "effective_width_px": 67.1,
+      "effective_throughput_bits_per_sec": 4.65
+    },
+    "auto_heal": {
+      "status": "solved",
+      "after_collisions": 0,
+      "after_primary_hits": 8591,
+      "after_mt_ms": 538,
+      "delta_mt_ms": 0,
+      "explanation": "Relocated 'Cancel & Clear Cart' by 198px (dx: -14px, dy: -198px to [16, 228]), expanding edge-to-edge gap from 8px to 98px. Residual hazard: 0 / 10000 collisions (95% CI upper bound: 0.04%). Primary hit rate: 85.9% -> 85.9%. Routine MT: 0 ms (no change: primary target dimensions and distance were already >= 44px)."
+    }
+  },
+  {
+    "preset_id": "clinical-infusion",
+    "preset_name": "3. Clinical Infusion Keypad [illustrative, not a medical device, not validated]",
+    "motor_profile": "Parkinsonian Postural/Action Approximation [illustrative, not a medical device, not validated] (5 Hz)",
+    "sample_size": 10000,
+    "seed": 42,
+    "baseline": {
+      "primary_hits": 8502,
+      "primary_rate_percent": 85.02,
+      "destructive_collisions": 0,
+      "destructive_rate_percent": 0,
+      "destructive_wilson_ci": {
+        "lower_percent": 0,
+        "upper_percent": 0.04
+      },
+      "neutral_misses": 1498,
+      "neutral_rate_percent": 14.98,
+      "partition_sum": 10000,
+      "mean_mt_ms": 439,
+      "mean_id_bits": 2.14,
+      "nominal_throughput_bits_per_sec": 4.89,
+      "effective_width_px": 38.6,
+      "effective_throughput_bits_per_sec": 6.06
+    },
+    "auto_heal": {
+      "status": "no_change_needed",
+      "after_collisions": 0,
+      "after_primary_hits": 8502,
+      "after_mt_ms": 439,
+      "delta_mt_ms": 0,
+      "explanation": "Baseline layout already satisfies the zero-collision safety target (0 / 10000 collisions, 95% CI upper bound: 0.04%). No layout change needed. Movement time: no change (439 ms, ID: 2.14 bits, nominal TP: 4.89 bits/s, effective TP: 6.06 bits/s)."
+    }
+  },
+  {
+    "preset_id": "git-pr-bar",
+    "preset_name": "4. Git Pull Request Bar",
+    "motor_profile": "Essential-Tremor-Like Oscillation (6 Hz)",
+    "sample_size": 10000,
+    "seed": 42,
+    "baseline": {
+      "primary_hits": 9140,
+      "primary_rate_percent": 91.4,
+      "destructive_collisions": 0,
+      "destructive_rate_percent": 0,
+      "destructive_wilson_ci": {
+        "lower_percent": 0,
+        "upper_percent": 0.04
+      },
+      "neutral_misses": 860,
+      "neutral_rate_percent": 8.6,
+      "partition_sum": 10000,
+      "mean_mt_ms": 433,
+      "mean_id_bits": 2.1,
+      "nominal_throughput_bits_per_sec": 4.85,
+      "effective_width_px": 40.3,
+      "effective_throughput_bits_per_sec": 6.34
+    },
+    "auto_heal": {
+      "status": "no_change_needed",
+      "after_collisions": 0,
+      "after_primary_hits": 9140,
+      "after_mt_ms": 433,
+      "delta_mt_ms": 0,
+      "explanation": "Baseline layout already satisfies the zero-collision safety target (0 / 10000 collisions, 95% CI upper bound: 0.04%). No layout change needed. Movement time: no change (433 ms, ID: 2.10 bits, nominal TP: 4.85 bits/s, effective TP: 6.34 bits/s)."
+    }
+  },
+  {
+    "preset_id": "wcag-aaa-stress",
+    "preset_name": "5. 48px WCAG AAA Stress Case",
+    "motor_profile": "Essential-Tremor-Like Oscillation (6 Hz)",
+    "sample_size": 10000,
+    "seed": 42,
+    "baseline": {
+      "primary_hits": 9586,
+      "primary_rate_percent": 95.86,
+      "destructive_collisions": 81,
+      "destructive_rate_percent": 0.81,
+      "destructive_wilson_ci": {
+        "lower_percent": 0.65,
+        "upper_percent": 1.01
+      },
+      "neutral_misses": 333,
+      "neutral_rate_percent": 3.33,
+      "partition_sum": 10000,
+      "mean_mt_ms": 517,
+      "mean_id_bits": 2.75,
+      "nominal_throughput_bits_per_sec": 5.31,
+      "effective_width_px": 47,
+      "effective_throughput_bits_per_sec": 5.36
+    },
+    "auto_heal": {
+      "status": "solved",
+      "after_collisions": 0,
+      "after_primary_hits": 9586,
+      "after_mt_ms": 517,
+      "delta_mt_ms": 0,
+      "explanation": "Relocated 'Revoke Production Keys' by 152px (dx: +114px, dy: -100px to [496, 16]), expanding edge-to-edge gap from 4px to 129px. Residual hazard: 0 / 10000 collisions (95% CI upper bound: 0.04%). Primary hit rate: 95.9% -> 95.9%. Routine MT: 0 ms (no change: primary target dimensions and distance were already >= 44px)."
+    }
+  }
+]

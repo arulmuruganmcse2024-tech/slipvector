@@ -4,15 +4,20 @@
 > *Submitted to the Devpost "Build With AI: Basics" Hackathon*  
 > **Live Demo URL:** [https://arulmuruganmcse2024-tech.github.io/slipvector/](https://arulmuruganmcse2024-tech.github.io/slipvector/) *(or run locally via `npm run preview`)*
 
-[![Verification Status](https://img.shields.io/badge/Vitest-17%2F17%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
-[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-No%20Violations%20Detected-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
+[![Verification Status](https://img.shields.io/badge/Vitest-22%2F22%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
+[![Playwright E2E](https://img.shields.io/badge/Playwright-18%2F18%20Passing-10B981?style=flat-square&logo=playwright)](tests/buttons.spec.ts)
+[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-100%2F100%20Accessibility-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
 [![WCAG 2.2](https://img.shields.io/badge/WCAG%202.2-SC%202.5.8%20%7C%20SC%202.5.5-06B6D4?style=flat-square)](src/engine/staticChecks.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](LICENSE)
 
 ---
 
-## 🧭 Project Navigation & Artifacts
+## 🧭 Project Navigation & Pre-Submission Audit Artifacts
 
+- 📊 [**Live Empirical Results Table (`docs/audit/results_table.md`)**](docs/audit/results_table.md)
+- 🔘 [**Interactive Button Map Audit (`docs/audit/button_map.md`)**](docs/audit/button_map.md)
+- 🏛️ [**Lighthouse Production Audit Report (`docs/audit/lighthouse.md`)**](docs/audit/lighthouse.md)
+- 🎙️ [**Demo Script Verification Numbers (`docs/audit/demo_numbers.md`)**](docs/audit/demo_numbers.md)
 - 📋 [**Project Scope (`devpost/scope.md`)**](devpost/scope.md) • [Visual Scope (`devpost/scope.html`)](devpost/scope.html)
 - 📝 [**Product Requirements (`devpost/prd.md`)**](devpost/prd.md) • [Visual PRD (`devpost/prd.html`)](devpost/prd.html)
 - 📐 [**Technical Specification (`devpost/spec.md`)**](devpost/spec.md) • [Visual Spec (`devpost/spec.html`)](devpost/spec.html)
@@ -125,14 +130,23 @@ When $k = 0$, SlipVector never claims "0% risk"; it displays `"0 / 500 collision
 
 ```bash
 # Clone the repository
-git clone https://github.com/slipvector/slipvector.git
+git clone https://github.com/arulmuruganmcse2024-tech/slipvector.git
 cd slipvector
 
 # Install dependencies
 npm ci
 
-# Run automated test suites (17 Vitest unit & integration tests + Playwright E2E a11y)
+# Run Vitest unit, empirical metrics & audit runner tests (22 tests)
 npm test
+
+# Run button-by-button Playwright test suite (8 tests)
+npm run test:buttons
+
+# Run Axe-Core accessibility & responsive zoom test suite (10 tests)
+npm run test:a11y
+
+# Run all 40 automated tests (Vitest + Playwright)
+npm run test:all
 
 # Build production bundle
 npm run build
