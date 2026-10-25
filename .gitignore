@@ -18,3 +18,11 @@ Thumbs.db
 # Test outputs
 test-results/
 playwright-report/
+
+# Media scratch files (video/audio production)
+*.mp4
+*.mp3
+*.wav
+*.webm
+*.ass
+*.srt

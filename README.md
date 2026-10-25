@@ -1,7 +1,15 @@
-# ⚡ SlipVector
+# SlipVector: Browser-Native Kinetic UI Misclick & Motor-Variability Stress Auditor
 
-### **Kinetic UI Misclick & Motor-Variability Stress Auditor**
-*Submitted to the Devpost **Build With AI: Basics** Hackathon (March 2026)*
+## 🎥 Protocol Demo
+
+[![SlipVector Demo](https://img.youtube.com/vi/mPVSkuuNzAs/sddefault.jpg)](https://youtu.be/mPVSkuuNzAs)
+
+> Build With AI: Basics Hackathon Submission  
+> Track Alignment: Browser-Native Kinetic UI Accessibility & Monte Carlo Stress Auditing  
+> Protocol Repository: https://github.com/arulmuruganmcse2024-tech/slipvector  
+> Live Verification Studio: https://arulmuruganmcse2024-tech.github.io/slipvector/
+
+---
 
 [![🚀 Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Try%20SlipVector%20Online-06B6D4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://arulmuruganmcse2024-tech.github.io/slipvector/)
 [![Devpost Hackathon](https://img.shields.io/badge/Devpost-Build%20With%20AI%3A%20Basics-003B5C?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com)
@@ -59,10 +67,11 @@ SlipVector simulates hundreds to thousands ($500$, $2,000$, or $10,000$) of real
    - Verify the **Before vs. After Verification Receipt** showing collision rate dropping to **$0 / 500$ ($0.00\%$, 95% CI upper bound: $0.76\%$)**.
 4. **Inspect the "48px WCAG AAA Stress Case" (Preset #5)**:
    - Select **Preset #5** from the dropdown. Both `Publish Release` and `Revoke Production Keys` are large `48x48px` targets (passing both WCAG AA and AAA).
-   - Run the swarm: Observe that because `Revoke Production Keys` sits directly behind `Publish Release` along the approach vector, **directional overshoot still causes destructive collisions** ($3 / 500$, $0.60\%$).
+   - Run the swarm at $N = 10{,}000$: Observe that because `Revoke Production Keys` sits directly behind `Publish Release` along the approach vector, **directional overshoot still causes destructive collisions** ($81 / 10{,}000$, $0.81\%$, Wilson 95% CI $[0.65\%, 1.01\%]$).
    - This empirically defeats the "28px strawman" and proves that static target size alone is insufficient without approach-vector awareness.
 5. **Dogfood SlipVector**:
    - Click **"🔍 Audit SlipVector's Own UI (Dogfood)"**. The app extracts its own live toolbar coordinates and proves $0 / 500$ collisions.
+
 
 ---
 
