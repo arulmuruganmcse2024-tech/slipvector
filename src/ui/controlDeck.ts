@@ -1,6 +1,7 @@
 /**
  * Control Deck Component (Left Panel)
  * Manages Presets, Motor Profiles, Parameter Sliders, and Target Coordinates.
+ * Supports smooth in-place state reconciliation to preserve slider drag and keyboard focus.
  */
 
 import { PRESETS, MOTOR_PROFILES, PresetLayout } from '../engine/presets.ts';
@@ -23,6 +24,65 @@ export function renderControlDeck(
   selectedElementId: string | null,
   callbacks: ControlDeckCallbacks
 ): void {
+  const existingInner = containerEl.querySelector('.control-deck-inner') as HTMLElement | null;
+  const prevPresetId = existingInner?.getAttribute('data-preset-id');
+  const selectedEl = elements.find(e => e.id === selectedElementId) || elements[1] || elements[0];
+  const activeSelectedId = selectedEl?.id || '';
+  const prevSelectedId = existingInner?.getAttribute('data-selected-id');
+
+  // In-place reconciliation: update values without destroying active DOM / event listeners / slider focus
+  if (existingInner && prevPresetId === currentPresetId && prevSelectedId === activeSelectedId) {
+    const valSample = existingInner.querySelector('#val-sample-size');
+    if (valSample) valSample.textContent = currentSampleSize.toLocaleString();
+
+    existingInner.querySelectorAll('.btn-sample').forEach(btn => {
+      const size = parseInt((btn as HTMLElement).dataset.size || '500', 10);
+      btn.classList.toggle('active', size === currentSampleSize);
+    });
+
+    const valOvershoot = existingInner.querySelector('#val-overshoot');
+    if (valOvershoot) valOvershoot.textContent = `${currentProfile.overshootRatio.toFixed(2)}x`;
+    const slOvershoot = existingInner.querySelector('#slider-overshoot') as HTMLInputElement | null;
+    if (slOvershoot && document.activeElement !== slOvershoot) slOvershoot.value = currentProfile.overshootRatio.toString();
+
+    const valFreq = existingInner.querySelector('#val-frequency');
+    if (valFreq) valFreq.textContent = `${currentProfile.frequency.toFixed(1)} Hz`;
+    const slFreq = existingInner.querySelector('#slider-frequency') as HTMLInputElement | null;
+    if (slFreq && document.activeElement !== slFreq) slFreq.value = currentProfile.frequency.toString();
+
+    const valAmp = existingInner.querySelector('#val-amplitude');
+    if (valAmp) valAmp.textContent = `${currentProfile.amplitude.toFixed(1)} px`;
+    const slAmp = existingInner.querySelector('#slider-amplitude') as HTMLInputElement | null;
+    if (slAmp && document.activeElement !== slAmp) slAmp.value = currentProfile.amplitude.toString();
+
+    const valJerk = existingInner.querySelector('#val-jerk');
+    if (valJerk) valJerk.textContent = `${currentProfile.jerkImpulse.toFixed(1)} px`;
+    const slJerk = existingInner.querySelector('#slider-jerk') as HTMLInputElement | null;
+    if (slJerk && document.activeElement !== slJerk) slJerk.value = currentProfile.jerkImpulse.toString();
+
+    const valUrg = existingInner.querySelector('#val-urgency');
+    if (valUrg) valUrg.textContent = `${currentProfile.urgency.toFixed(2)}x`;
+    const slUrg = existingInner.querySelector('#slider-urgency') as HTMLInputElement | null;
+    if (slUrg && document.activeElement !== slUrg) slUrg.value = currentProfile.urgency.toString();
+
+    const selProfile = existingInner.querySelector('#select-profile') as HTMLSelectElement | null;
+    if (selProfile && selProfile.value !== currentProfile.id) selProfile.value = currentProfile.id;
+    const profDesc = existingInner.querySelector('.profile-desc');
+    if (profDesc) profDesc.textContent = currentProfile.description;
+
+    if (selectedEl) {
+      const inX = existingInner.querySelector('#inp-geom-x') as HTMLInputElement | null;
+      const inY = existingInner.querySelector('#inp-geom-y') as HTMLInputElement | null;
+      const inW = existingInner.querySelector('#inp-geom-w') as HTMLInputElement | null;
+      const inH = existingInner.querySelector('#inp-geom-h') as HTMLInputElement | null;
+      if (inX && document.activeElement !== inX) inX.value = selectedEl.rect.x.toString();
+      if (inY && document.activeElement !== inY) inY.value = selectedEl.rect.y.toString();
+      if (inW && document.activeElement !== inW) inW.value = selectedEl.rect.width.toString();
+      if (inH && document.activeElement !== inH) inH.value = selectedEl.rect.height.toString();
+    }
+    return;
+  }
+
   const presetOptions = PRESETS.map(p => `
     <option value="${p.id}" ${p.id === currentPresetId ? 'selected' : ''}>
       ${p.name}
@@ -37,10 +97,8 @@ export function renderControlDeck(
 
   const activePreset = PRESETS.find(p => p.id === currentPresetId) || PRESETS[0];
 
-  const selectedEl = elements.find(e => e.id === selectedElementId) || elements[1] || elements[0];
-
   containerEl.innerHTML = `
-    <div class="control-deck-inner">
+    <div class="control-deck-inner" data-preset-id="${currentPresetId}" data-selected-id="${activeSelectedId}">
       <!-- Run Swarm Button -->
       <button id="btn-run-swarm" class="btn-primary-action">
         <span class="btn-icon">⚡</span> Run Kinetic Swarm
@@ -199,6 +257,17 @@ export function renderControlDeck(
       jerkImpulse: parseFloat(slJerk.value),
       urgency: parseFloat(slUrg.value)
     };
+    const valOvershoot = containerEl.querySelector('#val-overshoot');
+    if (valOvershoot) valOvershoot.textContent = `${updated.overshootRatio.toFixed(2)}x`;
+    const valFreq = containerEl.querySelector('#val-frequency');
+    if (valFreq) valFreq.textContent = `${updated.frequency.toFixed(1)} Hz`;
+    const valAmp = containerEl.querySelector('#val-amplitude');
+    if (valAmp) valAmp.textContent = `${updated.amplitude.toFixed(1)} px`;
+    const valJerk = containerEl.querySelector('#val-jerk');
+    if (valJerk) valJerk.textContent = `${updated.jerkImpulse.toFixed(1)} px`;
+    const valUrg = containerEl.querySelector('#val-urgency');
+    if (valUrg) valUrg.textContent = `${updated.urgency.toFixed(2)}x`;
+
     callbacks.onParamChange(updated, currentSampleSize);
   };
 

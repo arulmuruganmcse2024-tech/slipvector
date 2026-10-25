@@ -12,7 +12,7 @@ import { evaluateStaticChecks } from './engine/staticChecks.ts';
 import { solveLayout, SolverResult } from './engine/solver.ts';
 import { computeMitigationMatrix } from './engine/mitigations.ts';
 import { SwarmRenderer } from './canvas/swarmRenderer.ts';
-import { WorkerRequest, WorkerResponse } from './worker/simWorker.ts';
+import { WorkerRequest, WorkerResponse, runSimBatch } from './worker/simWorkerCore.ts';
 import { renderTelemetryBanner } from './ui/telemetryBanner.ts';
 import { renderControlDeck } from './ui/controlDeck.ts';
 import { renderSensitivityChart } from './ui/sensitivityChart.ts';
@@ -30,6 +30,7 @@ export class SlipVectorApp {
   private activeElements: UIElement[] = [];
   private initialElements: UIElement[] = [];
   private container = { width: 520, height: 280 };
+  private selectedElementId: string | null = null;
 
   private simWorker: Worker | null = null;
   private simResult: WorkerResponse | null = null;
@@ -37,6 +38,7 @@ export class SlipVectorApp {
   private isSimulating = false;
   private isSolving = false;
   private activeSensitivityParam: 'overshoot' | 'amplitude' = 'overshoot';
+  private paramDebounceTimer: number | null = null;
 
   private swarmRenderer!: SwarmRenderer;
   private stressTester = new PointerStressTester();
@@ -62,7 +64,13 @@ export class SlipVectorApp {
         type: 'module'
       });
 
-      this.simWorker.onmessage = (e: MessageEvent<WorkerResponse>) => {
+      this.simWorker.onmessage = (e: MessageEvent<any>) => {
+        if (e.data && e.data.error) {
+          console.warn('Simulation worker error:', e.data.error);
+          this.isSimulating = false;
+          this.renderAll();
+          return;
+        }
         this.isSimulating = false;
         this.simResult = e.data;
         this.swarmRenderer.setSimulationResult(this.simResult);
@@ -71,12 +79,14 @@ export class SlipVectorApp {
       };
 
       this.simWorker.onerror = (err) => {
-        console.error('Web Worker error:', err);
+        console.warn('Web Worker error, falling back to inline simulation:', err);
+        this.simWorker = null;
         this.isSimulating = false;
-        this.renderAll();
+        this.runSimulation();
       };
     } catch (err) {
       console.warn('Web Worker initialization fallback (inline simulation):', err);
+      this.simWorker = null;
     }
   }
 
@@ -90,7 +100,8 @@ export class SlipVectorApp {
         this.renderAll();
         this.runSimulation();
       },
-      onElementSelect: (_el) => {
+      onElementSelect: (el) => {
+        this.selectedElementId = el ? el.id : null;
         this.renderControlDeck();
       }
     });
@@ -161,7 +172,6 @@ export class SlipVectorApp {
   }
 
   public runSimulation(): void {
-    if (!this.simWorker) return;
     this.isSimulating = true;
     this.renderTelemetry();
 
@@ -173,7 +183,28 @@ export class SlipVectorApp {
       dwellTimeMs: 90.0
     };
 
-    this.simWorker.postMessage(req);
+    if (this.simWorker) {
+      try {
+        this.simWorker.postMessage(req);
+        return;
+      } catch (err) {
+        console.warn('Worker postMessage failed, falling back to inline simulation:', err);
+      }
+    }
+
+    // Inline simulation fallback (guarantees zero-hang execution in any runtime)
+    try {
+      const res = runSimBatch(req);
+      this.isSimulating = false;
+      this.simResult = res;
+      this.swarmRenderer.setSimulationResult(this.simResult);
+      this.updateTelemetryAndDiagnostics();
+      this.updateAccessibleSummary();
+    } catch (err) {
+      console.error('Inline simulation error:', err);
+      this.isSimulating = false;
+      this.renderAll();
+    }
   }
 
   public triggerAutoHeal(): void {
@@ -229,7 +260,7 @@ export class SlipVectorApp {
       this.currentProfile,
       this.currentSampleSize,
       this.activeElements,
-      null,
+      this.selectedElementId,
       {
         onPresetSelect: (p) => {
           this.currentPreset = p;
@@ -237,6 +268,7 @@ export class SlipVectorApp {
           this.initialElements = p.elements.map(e => ({ ...e, rect: { ...e.rect } }));
           this.container = { ...p.container };
           this.solverResult = null;
+          this.selectedElementId = null;
           const recProf = MOTOR_PROFILES.find(pr => pr.id === p.recommendedProfileId);
           if (recProf) this.currentProfile = recProf;
 
@@ -262,9 +294,14 @@ export class SlipVectorApp {
         onParamChange: (updatedProfile, size) => {
           this.currentProfile = updatedProfile;
           this.currentSampleSize = size;
+          this.renderControlDeck();
           this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
-          this.renderAll();
-          this.runSimulation();
+          if (this.paramDebounceTimer) {
+            clearTimeout(this.paramDebounceTimer);
+          }
+          this.paramDebounceTimer = window.setTimeout(() => {
+            this.runSimulation();
+          }, 80);
         },
         onElementRectChange: (id, x, y, w, h) => {
           const el = this.activeElements.find(e => e.id === id);
@@ -310,7 +347,8 @@ export class SlipVectorApp {
       {
         onTriggerAutoHeal: () => this.triggerAutoHeal(),
         onApplyCSSPatch: () => {}
-      }
+      },
+      this.currentSampleSize
     );
   }
 
@@ -504,9 +542,15 @@ export class SlipVectorApp {
   }
 }
 
-// Start application on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+function startApp(): void {
   const app = new SlipVectorApp();
   app.init();
   (window as any).slipVectorApp = app;
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
+

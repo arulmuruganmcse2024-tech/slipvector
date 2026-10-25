@@ -236,7 +236,7 @@ export class SwarmRenderer {
   }
 
   private renderAnimatedTrajectories(): void {
-    if (!this.result) return;
+    if (!this.result || !this.result.trajectoryLengths || !this.result.trajectorySamples) return;
     const { trajectorySamples, trajectoryLengths } = this.result;
     const { ctx } = this;
 
@@ -277,7 +277,7 @@ export class SwarmRenderer {
   }
 
   private renderEndpoints(): void {
-    if (!this.result) return;
+    if (!this.result || !this.result.endpoints) return;
     const { endpoints } = this.result;
     const { ctx } = this;
     const count = endpoints.length / 3;
@@ -414,14 +414,21 @@ export class SwarmRenderer {
     }
   }
 
-  // --- Mouse & Drag Interaction ---
+  // --- Mouse & Pointer Drag Interaction ---
   private attachEvents(): void {
-    this.canvas.addEventListener('mousedown', this.handleMouseDown);
-    window.addEventListener('mousemove', this.handleMouseMove);
-    window.addEventListener('mouseup', this.handleMouseUp);
+    if (window.PointerEvent) {
+      this.canvas.addEventListener('pointerdown', this.handlePointerDown);
+      window.addEventListener('pointermove', this.handlePointerMove);
+      window.addEventListener('pointerup', this.handlePointerUp);
+      window.addEventListener('pointercancel', this.handlePointerUp);
+    } else {
+      this.canvas.addEventListener('mousedown', this.handleMouseDown);
+      window.addEventListener('mousemove', this.handleMouseMove);
+      window.addEventListener('mouseup', this.handleMouseUp);
+    }
   }
 
-  private getCanvasPos(e: MouseEvent): { x: number; y: number } {
+  private getCanvasPos(e: MouseEvent | PointerEvent): { x: number; y: number } {
     const rect = this.canvas.getBoundingClientRect();
     return {
       x: e.clientX - rect.left,
@@ -429,7 +436,20 @@ export class SwarmRenderer {
     };
   }
 
+  private handlePointerDown = (e: PointerEvent): void => {
+    if (e.button !== 0) return;
+    this.handleStart(e);
+    try {
+      this.canvas.setPointerCapture(e.pointerId);
+    } catch (_) {}
+  };
+
   private handleMouseDown = (e: MouseEvent): void => {
+    if (e.button !== 0) return;
+    this.handleStart(e);
+  };
+
+  private handleStart(e: MouseEvent | PointerEvent): void {
     const pos = this.getCanvasPos(e);
 
     // Check elements top-to-bottom
@@ -460,9 +480,17 @@ export class SwarmRenderer {
       this.onElementSelect?.(null);
       this.render();
     }
+  }
+
+  private handlePointerMove = (e: PointerEvent): void => {
+    this.handleMove(e);
   };
 
   private handleMouseMove = (e: MouseEvent): void => {
+    this.handleMove(e);
+  };
+
+  private handleMove(e: MouseEvent | PointerEvent): void {
     if (!this.draggingElementId) return;
 
     const pos = this.getCanvasPos(e);
@@ -477,12 +505,23 @@ export class SwarmRenderer {
     el.rect.y = Math.round(newY);
 
     this.render();
+  }
+
+  private handlePointerUp = (e: PointerEvent): void => {
+    try {
+      this.canvas.releasePointerCapture(e.pointerId);
+    } catch (_) {}
+    this.handleEnd();
   };
 
   private handleMouseUp = (): void => {
+    this.handleEnd();
+  };
+
+  private handleEnd(): void {
     if (this.draggingElementId) {
       this.draggingElementId = null;
       this.onElementChange?.(this.elements);
     }
-  };
+  }
 }

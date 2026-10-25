@@ -20,11 +20,11 @@ export function openHTMLImportModal(callbacks: HTMLImportModalCallbacks): void {
   let currentLayout: ExtractedLayout | null = null;
 
   modalContainer.innerHTML = `
-    <div class="modal-dialog">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-import-heading">
       <div class="modal-header">
         <div class="modal-title-row">
           <span class="modal-icon">📋</span>
-          <h2>Paste Your Own HTML/CSS Inspector</h2>
+          <h2 id="modal-import-heading">Paste Your Own HTML/CSS Inspector</h2>
         </div>
         <button id="btn-modal-close" class="btn-close" aria-label="Close modal">✕</button>
       </div>
@@ -37,8 +37,8 @@ export function openHTMLImportModal(callbacks: HTMLImportModalCallbacks): void {
 
         <!-- Starter selector -->
         <div class="starter-select-row">
-          <label>Load Starter Snippet:</label>
-          <select id="sel-starter" class="select-dropdown">
+          <label for="sel-starter">Load Starter Snippet:</label>
+          <select id="sel-starter" class="select-dropdown" aria-label="Load Starter Snippet">
             <option value="">-- Choose a starter --</option>
             ${STARTER_SNIPPETS.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
           </select>

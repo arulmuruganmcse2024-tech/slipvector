@@ -32,6 +32,11 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
   background-color: var(--bg-base);
   color: var(--text-primary);
@@ -41,6 +46,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Tabular Numbers */
@@ -394,11 +401,15 @@ body {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
   position: relative;
   overflow: hidden;
+  max-width: 100%;
 }
 
 #canvas-swarm {
   display: block;
   cursor: crosshair;
+  touch-action: none;
+  max-width: 100%;
+  height: auto;
 }
 
 .canvas-hint {
@@ -1163,3 +1174,95 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
     display: none !important;
   }
 }
+
+/* Responsive viewports & 320px / 200% zoom accommodations (WCAG 1.4.10 Reflow) */
+@media (max-width: 900px) {
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .brand-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .brand-tagline {
+    border-left: none;
+    padding-left: 0;
+    font-size: 11px;
+    display: block;
+    width: 100%;
+  }
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .btn-header {
+    flex: 1 1 calc(50% - 8px);
+    justify-content: center;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  .telemetry-banner-wrapper {
+    padding: 12px 16px;
+  }
+  .telemetry-grid {
+    grid-template-columns: 1fr;
+  }
+  .static-badges-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .static-badge-item {
+    flex: 1 1 calc(50% - 6px);
+  }
+  .workbench-main {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+  .left-panel, .right-panel, .center-stage {
+    padding: 14px 16px;
+    max-height: none;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .stage-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .stage-toggles {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .telemetry-fitts-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-header {
+    flex: 1 1 100%;
+  }
+  .static-badge-item {
+    flex: 1 1 100%;
+  }
+  .app-header {
+    padding: 10px 12px;
+  }
+  .telemetry-banner-wrapper {
+    padding: 10px 12px;
+  }
+  .left-panel, .right-panel, .center-stage {
+    padding: 10px 12px;
+  }
+  .modal-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 8px auto;
+    padding: 12px;
+  }
+}
+

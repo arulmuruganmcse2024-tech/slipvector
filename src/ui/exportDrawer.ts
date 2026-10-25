@@ -133,16 +133,40 @@ export function renderExportSection(
     }, 2500);
   };
 
+  const copyText = (text: string, successMsg: string) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => showToast(successMsg))
+        .catch(() => {
+          fallbackCopy(text);
+          showToast(successMsg);
+        });
+    } else {
+      fallbackCopy(text);
+      showToast(successMsg);
+    }
+  };
+
+  const fallbackCopy = (text: string) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+    } catch (_) {}
+    document.body.removeChild(ta);
+  };
+
   btnCss?.addEventListener('click', () => {
-    navigator.clipboard.writeText(cssPatch).then(() => {
-      showToast('✓ Production CSS patch copied to clipboard!');
-    });
+    copyText(cssPatch, '✓ Production CSS patch copied to clipboard!');
   });
 
   btnTailwind?.addEventListener('click', () => {
-    navigator.clipboard.writeText(tailwindClasses).then(() => {
-      showToast('✓ Tailwind CSS classes copied to clipboard!');
-    });
+    copyText(tailwindClasses, '✓ Tailwind CSS classes copied to clipboard!');
   });
 
   btnJson?.addEventListener('click', () => {

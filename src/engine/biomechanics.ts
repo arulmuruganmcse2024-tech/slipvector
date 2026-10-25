@@ -152,8 +152,10 @@ export function computeEffectiveTargetWidth(target: Rect, approachAngleRad: numb
   const sin = Math.abs(Math.sin(approachAngleRad));
   const eps = 1e-6;
 
-  const wCollinear = target.width / Math.max(eps, cos);
-  const hCollinear = target.height / Math.max(eps, sin);
+  const w = Math.max(1, target.width);
+  const h = Math.max(1, target.height);
+  const wCollinear = w / Math.max(eps, cos);
+  const hCollinear = h / Math.max(eps, sin);
 
   return Math.min(wCollinear, hCollinear);
 }

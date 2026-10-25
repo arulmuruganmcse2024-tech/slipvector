@@ -161,6 +161,13 @@ export async function extractLayoutFromHTML(
           });
         });
 
+        // Ensure at least one primary target exists if interactive elements are found
+        const hasPrimary = extracted.some(e => e.role === 'primary');
+        if (!hasPrimary && extracted.length > 0) {
+          const candidate = extracted.find(e => e.role !== 'anchor') || extracted[0];
+          candidate.role = 'primary';
+        }
+
         // Compute enclosing container
         let maxX = 520;
         let maxY = 320;

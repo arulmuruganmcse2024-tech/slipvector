@@ -16,7 +16,8 @@ export function renderAutoHealSection(
   containerEl: HTMLElement,
   solverResult: SolverResult | null,
   isSolving: boolean,
-  callbacks: AutoHealCallbacks
+  callbacks: AutoHealCallbacks,
+  currentSampleSize: number = 500
 ): void {
   let receiptHtml = '';
 
@@ -41,7 +42,7 @@ export function renderAutoHealSection(
       statusLabel = '✓ SOLVED (Zero Collisions Certified)';
     }
 
-    const n = 500;
+    const n = currentSampleSize;
     const beforeText = formatWilsonCI(
       solverResult.beforeWilsonCI,
       solverResult.beforeCollisions,
