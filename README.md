@@ -193,4 +193,3 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-> **Non-Clinical Disclaimer**: SlipVector is a model-based ergonomic screening tool using parametric pointing models; not a clinical diagnostic instrument or a substitute for usability testing with human participants.
