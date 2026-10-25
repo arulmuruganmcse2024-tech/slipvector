@@ -79,14 +79,22 @@ Evaluates layouts against:
 - `WCAG 2.2 SC 2.5.5 (AAA Target Size >= 44x44px) — SlipVector Static Check`
 Includes edge-to-edge spacing calculation.
 
-### 5. `src/engine/solver.ts`
+### 5. `src/engine/presets.ts`
+Provides **5 presets**:
+1. *SaaS Settings Modal*: Baseline 500-trial simulation: 11 / 500 destructive collisions (2.20%), Wilson 95% CI [1.23%, 3.90%].
+2. *Mobile Commerce Checkout*: Mobile viewport under ~2.5 Hz transit sway.
+3. *Clinical Infusion Keypad*: Bedside keypad mock with tremor model.
+4. *Git Pull Request Bar*: Developer PR conversation footer.
+5. *48px WCAG AAA Stress Case*: 48px WCAG AAA Stress Case (10,000 trials before heal): 81 / 10,000 destructive collisions (0.81%), Wilson 95% CI [0.65%, 1.01%]. Post-Auto-Heal Constrained Solver (10,000 trials after heal): 0 / 10,000 destructive collisions (0.00%), Wilson 95% CI upper bound: 0.04%.
+
+### 6. `src/engine/solver.ts`
 - Constrained repulsive layout solver.
 - Computes safe placement for destructive elements orthogonal to approach vector $\hat{\mathbf{u}}$, separated by at least $24\text{px}$ from primary targets, within container bounds $[0, W_{\text{container}}] \times [0, H_{\text{container}}]$.
 - Expands target sizes toward $\ge 44\text{px}$.
 - Evaluates candidate layouts using fast Monte Carlo checks; if safe harbor is proven, outputs `status: 'solved'`, patch CSS, and Tailwind classes.
 - If physical bounds prevent $0$ collisions (e.g. cramped container or extreme tremor), honestly returns `status: 'infeasible'` with the best achievable configuration.
 
-### 6. `src/engine/mitigations.ts`
+### 7. `src/engine/mitigations.ts`
 Evaluates trade-offs across 4 strategies:
 - Spatial Separation + Target Expansion (Auto-Heal)
 - Soft Delete + Undo Toast
@@ -94,13 +102,13 @@ Evaluates trade-offs across 4 strategies:
 - Confirmation Modal
 Provides residual collision rate ($k/N$ + Wilson CI), routine movement time penalty (ms), and recovery friction (extra clicks).
 
-### 7. `src/import/htmlExtractor.ts`
+### 8. `src/import/htmlExtractor.ts`
 Sanitized DOM extractor rendering custom HTML inside `<iframe sandbox="allow-same-origin" srcdoc="...">`. Queries rendered geometry and assigns semantic roles based on transparent heuristic rules with interactive table overrides.
 
-### 8. `src/worker/simWorker.ts`
+### 9. `src/worker/simWorker.ts`
 Dedicated Web Worker handling simulation requests. Allocates `Float32Array` buffers for trajectory coordinates, executes $N$ trials, computes statistics, and returns results without blocking the UI thread.
 
-### 9. `src/canvas/swarmRenderer.ts`
+### 10. `src/canvas/swarmRenderer.ts`
 High-performance Canvas renderer displaying bounding boxes, approach vector arrow, animated particles, scatter markers, covariance ellipses, and Gaussian hazard density heatmaps.
 
 ## Data Model

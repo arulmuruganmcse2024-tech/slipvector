@@ -53,7 +53,7 @@ Source: `scope.md > The Unique Kernel`.
    - Primary: `<button id="save-changes">` (Save Changes, 28px height) at `(260, 200, 110, 28)`.
    - Destructive: `<button id="delete-workspace">` (Delete Workspace, 28px height, 4px gap) at `(374, 200, 130, 28)`.
    - Static Check: Passes WCAG AA (24px), Fails AAA (44px). High kinetic collision rate under diagonal approach.
-2. **Mobile Commuter Checkout**:
+2. **Mobile Commerce Checkout**:
    - Anchor: `<input id="promo-code">` at `(30, 60, 260, 44)`.
    - Primary: `<button id="complete-order">` (Complete Order, 44px) at `(30, 380, 260, 48)`.
    - Destructive: `<button id="cancel-cart">` (Cancel & Clear Cart, 32px) directly below at `(30, 436, 260, 32)`.
@@ -72,7 +72,7 @@ Source: `scope.md > The Unique Kernel`.
    - Primary: `<button id="publish-release">` (Publish Release, 48x48px) at `(200, 160, 140, 48)`.
    - Destructive: `<button id="revoke-keys">` (Revoke Production Keys, 48x48px, 8px gap) at `(348, 160, 180, 48)`.
    - Geometry: Destructive button sits directly behind primary along ballistic approach vector $\hat{\mathbf{u}}$.
-   - Behavior: Passes both WCAG AA (24px) and WCAG AAA (44px) static checks, but suffers substantial collision rate due to directional overshoot. Proves that static target sizing alone is insufficient.
+   - Behavior: Passes both WCAG AA (24px) and WCAG AAA (44px) static checks, but suffers substantial collision rate due to directional overshoot. 48px WCAG AAA Stress Case (10,000 trials before heal): 81 / 10,000 destructive collisions (0.81%), Wilson 95% CI [0.65%, 1.01%]. Post-Auto-Heal Constrained Solver (10,000 trials after heal): 0 / 10,000 destructive collisions (0.00%), Wilson 95% CI upper bound: 0.04%. Proves that static target sizing alone is insufficient.
 
 ### FR2: Paste Your Own HTML/CSS Sandboxed Inspector
 - Secure `<iframe sandbox="allow-same-origin" srcdoc="...">` isolates custom HTML/CSS while keeping `contentDocument` accessible without cross-origin exceptions.

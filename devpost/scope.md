@@ -35,13 +35,13 @@ Today, teams rely either on static WCAG guidelines (which check individual butto
 Static accessibility compliance gives a false sense of security: buttons can strictly satisfy WCAG 2.2 AA (24px) or AAA (44px) target size rules, yet suffer catastrophic misclick rates when placed immediately behind primary targets along natural ballistic approach vectors. Creating an empirical kinetic simulation tool empowers teams to catch motor-variability hazards during design and code review.
 
 ## What "Working" Looks Like
-A developer loads Preset #5 (48px WCAG AAA Stress Case). The static auditor shows green "PASS" badges for both WCAG AA (24px) and AAA (44px). Running the kinetic swarm reveals destructive misclicks due to directional overshoot. Clicking **"🛡️ Run Auto-Heal Solver"** immediately displaces the destructive action away from the ballistic approach vector, re-runs the simulation, and proves $0 / 500$ collisions with an empirical Before/After Verification Receipt and clean CSS patch.
+A developer loads Preset #1 (SaaS Settings Modal) to observe baseline 500-trial simulation: 11 / 500 destructive collisions (2.20%), Wilson 95% CI [1.23%, 3.90%]. They then test Preset #5 (48px WCAG AAA Stress Case) where static audits show green "PASS" badges for both WCAG AA (24px) and AAA (44px), yet 10,000 trials before heal reveal 81 / 10,000 destructive collisions (0.81%), Wilson 95% CI [0.65%, 1.01%] due to directional overshoot. Clicking **"🛡️ Run Auto-Heal Solver"** immediately displaces the destructive action away from the ballistic approach vector, re-runs the simulation, and proves Post-Auto-Heal Constrained Solver (10,000 trials after heal): 0 / 10,000 destructive collisions (0.00%), Wilson 95% CI upper bound: 0.04% with an empirical Before/After Verification Receipt and clean CSS patch.
 
 ## The POC Boundary
 ### In Scope
-- **5 High-Fidelity Presets**:
+- **5 Presets**:
   1. *SaaS Settings Modal* (28px Save Changes vs. 28px Delete Workspace).
-  2. *Mobile Commuter Checkout* (Complete Order vs. Cancel & Clear Cart under ~2.5 Hz transit sway).
+  2. *Mobile Commerce Checkout* (Complete Order vs. Cancel & Clear Cart under ~2.5 Hz transit sway).
   3. *Clinical Infusion Keypad* (Confirm Bolus vs. Reset Pump).
   4. *Git Pull Request Bar* (Merge Pull Request vs. Close & Delete Branch).
   5. *48px WCAG AAA Stress Case* (48px Publish Release vs. 48px Revoke Keys along direct approach vector).

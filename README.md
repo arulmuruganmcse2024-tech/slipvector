@@ -2,7 +2,7 @@
 
 ## 🎥 Protocol Demo
 
-[![SlipVector Demo](https://img.youtube.com/vi/mPVSkuuNzAs/sddefault.jpg)](https://youtu.be/mPVSkuuNzAs)
+[![SlipVector Demo](https://img.youtube.com/vi/mPVSkuuNzAs/hqdefault.jpg)](https://youtu.be/mPVSkuuNzAs)
 
 > Build With AI: Basics Hackathon Submission  
 > Track Alignment: Browser-Native Kinetic UI Accessibility & Monte Carlo Stress Auditing  
@@ -55,19 +55,20 @@ SlipVector simulates hundreds to thousands ($500$, $2,000$, or $10,000$) of real
 
 ## 🚀 10-Second Guided Demo
 
-1. **Launch Studio**: Open SlipVector in your browser.
+1. **Launch Studio**: Open SlipVector in your browser. The tool includes **5 presets** (SaaS Settings Modal, Mobile Commerce Checkout, Clinical Infusion Keypad, Git Pull Request Bar, 48px WCAG AAA Stress Case).
 2. **Observe Preset #1 (SaaS Settings Modal)**:
    - `Save Changes` (28px) sits adjacent to `Delete Workspace` (28px, 4px gap).
    - Static Check: Passes WCAG AA (24px), Fails AAA (44px).
    - Click **"⚡ Run Kinetic Swarm"** (or press `Space`). Watch 500 animated pointer trajectories trace from the text input anchor to the primary button.
-   - Observe the crimson collision markers where trajectories clip `Delete Workspace`.
+   - Observe the crimson collision markers where trajectories clip `Delete Workspace`: **Baseline 500-trial simulation: 11 / 500 destructive collisions (2.20%), Wilson 95% CI [1.23%, 3.90%]**.
 3. **Execute Auto-Heal**:
    - Click **"🛡️ Run Auto-Heal Constrained Solver"**.
    - The engine repositions the destructive target orthogonal to the approach vector, expands hitboxes to $\ge 44\text{px}$, and automatically re-simulates with the identical seed.
-   - Verify the **Before vs. After Verification Receipt** showing collision rate dropping to **$0 / 500$ ($0.00\%$, 95% CI upper bound: $0.76\%$)**.
+   - Verify the **Before vs. After Verification Receipt** showing collision rate dropping to **$0 / 500$ ($0.00\%$, Wilson 95% CI upper bound: $0.76\%$)**, and for 10,000 trials after heal dropping to **Post-Auto-Heal Constrained Solver (10,000 trials after heal): 0 / 10,000 destructive collisions (0.00%), Wilson 95% CI upper bound: 0.04%**.
 4. **Inspect the "48px WCAG AAA Stress Case" (Preset #5)**:
    - Select **Preset #5** from the dropdown. Both `Publish Release` and `Revoke Production Keys` are large `48x48px` targets (passing both WCAG AA and AAA).
-   - Run the swarm at $N = 10{,}000$: Observe that because `Revoke Production Keys` sits directly behind `Publish Release` along the approach vector, **directional overshoot still causes destructive collisions** ($81 / 10{,}000$, $0.81\%$, Wilson 95% CI $[0.65\%, 1.01\%]$).
+   - Run the swarm at $N = 10{,}000$: Observe that because `Revoke Production Keys` sits directly behind `Publish Release` along the approach vector, **directional overshoot still causes destructive collisions** (**48px WCAG AAA Stress Case (10,000 trials before heal): 81 / 10,000 destructive collisions (0.81%), Wilson 95% CI [0.65%, 1.01%]**).
+   - Running the Auto-Heal Solver produces **0 / 10,000 destructive collisions (0.00%), Wilson 95% CI upper bound: 0.04%**.
    - This empirically defeats the "28px strawman" and proves that static target size alone is insufficient without approach-vector awareness.
 5. **Dogfood SlipVector**:
    - Click **"🔍 Audit SlipVector's Own UI (Dogfood)"**. The app extracts its own live toolbar coordinates and proves $0 / 500$ collisions.
