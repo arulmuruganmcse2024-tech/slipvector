@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlipVector — Kinetic UI Misclick & Motor-Variability Stress Auditor</title>
+  <meta name="description" content="Browser-native kinetic UI misclick and motor-variability stress auditor. Simulates human pointer trajectories (ballistic impulse scatter, 4-8 Hz tremor oscillation, transit sway) over interactive layouts to measure and heal accidental destructive misclicks.">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="brand-row">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-title">SlipVector</span>
+      <span class="brand-tagline">Kinetic UI Misclick & Motor-Variability Stress Auditor</span>
+    </div>
+
+    <div class="header-actions">
+      <button id="btn-guided-demo" class="btn-header btn-demo" title="Walk through an automated 10-second inspection and healing flow">
+        <span>▶</span> Run 10-Second Guided Demo
+      </button>
+      <button id="btn-dogfood-audit" class="btn-header btn-dogfood" title="Audit this app's own header controls">
+        <span>🔍</span> Audit SlipVector's Own UI (Dogfood)
+      </button>
+      <button id="btn-paste-html" class="btn-header" title="Inspect custom HTML/CSS via sandboxed srcdoc iframe">
+        <span>📋</span> Paste Your Own HTML/CSS
+      </button>
+      <button id="btn-pointer-stress" class="btn-header" title="Opt-in pointer perturbation stress test">
+        <span>🖐️</span> Motor Perturbation Test (Opt-In)
+      </button>
+    </div>
+  </header>
+
+  <!-- Top Dual-Auditor Telemetry Banner -->
+  <section id="telemetry-banner-root" class="telemetry-banner-wrapper" aria-label="Auditor Telemetry Summary">
+    <!-- Populated dynamically by telemetryBanner.ts -->
+  </section>
+
+  <!-- Main Three-Column Workbench -->
+  <main class="workbench-main">
+    <!-- Left Control Deck -->
+    <aside id="left-control-deck" class="left-panel" aria-label="Simulation Controls">
+      <!-- Populated dynamically by controlDeck.ts -->
+    </aside>
+
+    <!-- Center Stage -->
+    <section class="center-stage" aria-label="Interactive Kinetic Stage">
+      <div class="stage-toolbar">
+        <span class="panel-section-title">Kinetic Pointing Canvas (60 FPS)</span>
+        <div class="stage-toggles">
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-toggle-trajectories" checked />
+            <span>Particle Trajectories</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-toggle-covariance" checked />
+            <span>Approach Covariance</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-toggle-heatmap" />
+            <span>Hazard Heatmap</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="canvas-swarm" width="560" height="320"></canvas>
+      </div>
+      <div class="canvas-hint">
+        💡 Drag buttons to test spatial separation • Red Diamond = Destructive Collision • Green Circle = Primary Hit
+      </div>
+
+      <!-- Screen-reader accessible tabular summary -->
+      <div id="accessible-summary" class="sr-only" aria-live="polite">
+        <!-- Live screen reader updates -->
+      </div>
+    </section>
+
+    <!-- Right Panel: Sensitivity Sweep & Mitigations -->
+    <aside id="right-panel-root" class="right-panel" aria-label="Diagnostics and Mitigations">
+      <div id="sensitivity-root">
+        <!-- Populated by sensitivityChart.ts -->
+      </div>
+      <div id="autoheal-root">
+        <!-- Populated by autoHealModal.ts in Slice 3 -->
+      </div>
+      <div id="mitigations-root">
+        <!-- Populated by mitigationTable.ts in Slice 3 -->
+      </div>
+      <div id="export-root">
+        <!-- Populated by exportDrawer.ts in Slice 3 -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- Persistent Non-Clinical Disclaimer Footer -->
+  <footer class="app-footer">
+    <p>
+      <span class="footer-disclaimer">Non-Clinical Disclaimer:</span>
+      Model-based ergonomic screening tool using parametric pointing models; not a clinical diagnostic instrument or a substitute for usability testing with human participants.
+    </p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

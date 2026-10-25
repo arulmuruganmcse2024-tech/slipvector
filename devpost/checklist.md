@@ -20,7 +20,7 @@ Build mode: fast
   Learner check: Verify that running identical seeds produces identical collision counts and that throughput conforms to the MacKenzie 1992 empirical range.
   Commit: `feat(engine): implement biomechanical Monte Carlo engine, Wilson CI stats, and calibration test suite (Slice 1)`
 
-- [ ] **2. Interactive Workbench, 5 Presets, Sanitized HTML Inspector, Self-Dogfooding & Sensitivity Chart**
+- [x] **2. Interactive Workbench, 5 Presets, Sanitized HTML Inspector, Self-Dogfooding & Sensitivity Chart**
   Becomes usable: Interactive browser studio with 60 FPS HTML5 Canvas, 5 presets (including Preset #5: 48px WCAG AAA Stress Case), Web Worker off-thread execution, real-time dual static/kinetic telemetry banner, sandboxed HTML/CSS importer, 1-click self-dogfooding audit, and sensitivity sweep chart.
   Why now: Connects the validated biomechanical core to human eyes and user interaction, proving the "defeats the 28px strawman" phenomenon where AAA 48px targets collide under directional approach.
   PRD ref: `prd.md > Features and Behavior > FR1, FR2, FR3, FR5, FR8, FR9`
