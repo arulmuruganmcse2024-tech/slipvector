@@ -83,7 +83,32 @@ export function renderControlDeck(
     return;
   }
 
-  const presetOptions = PRESETS.map(p => `
+  const allPresets = [...PRESETS];
+  if (currentPresetId === 'dogfood-audit') {
+    allPresets.push({
+      id: 'dogfood-audit',
+      name: "🔍 Dogfood: SlipVector Toolbar",
+      subtitle: "Self-audit of SlipVector's live action toolbar",
+      description: "Live bounding client rect of SlipVector's own controls loaded into the kinetic canvas.",
+      container: { width: 640, height: 200 },
+      elements: elements,
+      recommendedProfileId: 'steady-baseline',
+      defaultSampleSize: 500
+    });
+  } else if (currentPresetId === 'custom-import') {
+    allPresets.push({
+      id: 'custom-import',
+      name: "📋 Custom Imported Layout",
+      subtitle: "User imported HTML / CSS layout",
+      description: "Custom elements imported from clipboard or HTML inspector.",
+      container: { width: 640, height: 200 },
+      elements: elements,
+      recommendedProfileId: 'essential-tremor',
+      defaultSampleSize: 500
+    });
+  }
+
+  const presetOptions = allPresets.map(p => `
     <option value="${p.id}" ${p.id === currentPresetId ? 'selected' : ''}>
       ${p.name}
     </option>
@@ -95,7 +120,7 @@ export function renderControlDeck(
     </option>
   `).join('');
 
-  const activePreset = PRESETS.find(p => p.id === currentPresetId) || PRESETS[0];
+  const activePreset = allPresets.find(p => p.id === currentPresetId) || PRESETS[0];
 
   containerEl.innerHTML = `
     <div class="control-deck-inner" data-preset-id="${currentPresetId}" data-selected-id="${activeSelectedId}">

@@ -143,6 +143,16 @@ export class SlipVectorApp {
     btnPaste?.addEventListener('click', () => {
       openHTMLImportModal({
         onLoadLayout: (layout) => {
+          this.currentPreset = {
+            id: 'custom-import',
+            name: '📋 Custom Imported Layout',
+            subtitle: 'User imported HTML / CSS layout',
+            description: 'Custom elements imported from clipboard or HTML inspector.',
+            container: layout.container,
+            elements: layout.elements,
+            recommendedProfileId: 'essential-tremor',
+            defaultSampleSize: 500
+          };
           this.activeElements = layout.elements;
           this.initialElements = layout.elements.map(e => ({ ...e, rect: { ...e.rect } }));
           this.container = layout.container;
@@ -482,10 +492,23 @@ export class SlipVectorApp {
       }
     ];
 
+    const dogfoodPreset: PresetLayout = {
+      id: 'dogfood-audit',
+      name: '🔍 Dogfood: SlipVector Toolbar',
+      subtitle: "Self-audit of SlipVector's live action toolbar",
+      description: "Live bounding client rect of SlipVector's own controls loaded into the kinetic canvas.",
+      container: { width: 640, height: 200 },
+      elements: dogfoodElements,
+      recommendedProfileId: 'steady-baseline',
+      defaultSampleSize: 500
+    };
+
+    this.currentPreset = dogfoodPreset;
     this.activeElements = dogfoodElements;
     this.initialElements = dogfoodElements.map(e => ({ ...e, rect: { ...e.rect } }));
     this.container = { width: 640, height: 200 };
     this.currentProfile = MOTOR_PROFILES[0]; // Steady Baseline for desktop toolbar
+    this.currentSampleSize = 500;
     this.solverResult = null;
 
     this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
