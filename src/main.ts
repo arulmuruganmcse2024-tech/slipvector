@@ -240,6 +240,15 @@ export class SlipVectorApp {
           const recProf = MOTOR_PROFILES.find(pr => pr.id === p.recommendedProfileId);
           if (recProf) this.currentProfile = recProf;
 
+          // Default AAA stress case (Preset 5) to 10,000 trials
+          if (p.id === 'wcag-aaa-stress') {
+            this.currentSampleSize = 10000;
+          } else if (p.defaultSampleSize) {
+            this.currentSampleSize = p.defaultSampleSize;
+          } else {
+            this.currentSampleSize = 500;
+          }
+
           this.swarmRenderer.updateLayout(this.activeElements, this.container, this.currentProfile);
           this.renderAll();
           this.runSimulation();
@@ -313,13 +322,25 @@ export class SlipVectorApp {
 
     // Compute mock/current solver result for table if not solved yet
     const dummySolver: SolverResult = this.solverResult || {
-      status: 'solved',
+      status: beforeCollisions === 0 ? 'no_change_needed' : 'solved',
       optimizedElements: this.activeElements,
       beforeCollisions,
       afterCollisions: 0,
       beforeWilsonCI: { proportion: beforeCollisions / this.currentSampleSize, lower: 0, upper: 0.1 },
       afterWilsonCI: { proportion: 0, lower: 0, upper: 0.00762 },
+      beforePrimaryHits: this.simResult?.primaryHits ?? 0,
+      afterPrimaryHits: this.simResult?.primaryHits ?? 0,
+      beforeMTMs: Math.round(this.simResult?.meanMTMs ?? 500),
+      afterMTMs: Math.round(this.simResult?.meanMTMs ?? 500),
       deltaMTMs: 0,
+      beforeIDBits: this.simResult?.meanIDBits ?? 2,
+      afterIDBits: this.simResult?.meanIDBits ?? 2,
+      deltaIDBits: 0,
+      beforeThroughput: this.simResult?.meanTPBitsPerSec ?? 5,
+      afterThroughput: this.simResult?.meanTPBitsPerSec ?? 5,
+      deltaThroughput: 0,
+      effectiveThroughputBefore: this.simResult?.effectiveTPBitsPerSec ?? 5,
+      effectiveThroughputAfter: this.simResult?.effectiveTPBitsPerSec ?? 5,
       patchCSS: '',
       tailwindClasses: '',
       explanation: ''

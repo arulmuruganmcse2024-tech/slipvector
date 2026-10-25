@@ -3,16 +3,18 @@
  * Runs off-thread Monte Carlo simulations using Float32Array buffers.
  * Never blocks the UI thread even at N = 10,000 trials.
  * Measures real execution time dynamically via performance.now().
+ * Computes both Nominal and Effective (We = 4.133 * SD) Throughput (MacKenzie 1992, ISO 9241-9).
  */
 
 import {
   UIElement,
   MotorProfile,
   simulateSingleTrial,
-  SingleTrialResult
+  SingleTrialResult,
+  rectCenter
 } from '../engine/biomechanics.ts';
 import { createMulberry32 } from '../engine/prng.ts';
-import { wilsonInterval, WilsonInterval, mean } from '../engine/stats.ts';
+import { wilsonInterval, WilsonInterval, mean, standardDeviation } from '../engine/stats.ts';
 
 export interface WorkerRequest {
   elements: UIElement[];
@@ -35,7 +37,10 @@ export interface WorkerResponse {
   meanMTMs: number;
   meanIDBits: number;
   meanTPBitsPerSec: number;
-  endpoints: Float32Array; // 3 floats per trial: [endX, endY, hitTypeCode] (0: primary, 1: destructive, 2: neutral, 3: miss)
+  effectiveTPBitsPerSec: number;
+  effectiveWidth: number;
+  sdParallel: number;
+  endpoints: Float32Array; // 3 floats per trial: [endX, endY, hitTypeCode] (0: primary, 1: destructive, 2: neutral)
   trajectorySamples: Float32Array; // sample of animated trajectories
   trajectoryLengths: Int32Array; // number of points per sample trajectory
 }
@@ -54,16 +59,24 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
     return;
   }
 
+  const anchorCenter = rectCenter(anchorEl.rect);
+  const primaryCenter = rectCenter(primaryEl.rect);
+  const dx = primaryCenter.x - anchorCenter.x;
+  const dy = primaryCenter.y - anchorCenter.y;
+  const dist = Math.max(1, Math.hypot(dx, dy));
+  const ux = dx / dist;
+  const uy = dy / dist;
+
   const prng = createMulberry32(seed);
 
   let primaryHits = 0;
   let destructiveCollisions = 0;
   let neutralHits = 0;
-  let totalMisses = 0;
 
   const movementTimes: number[] = new Array(sampleSize);
   const idBitsList: number[] = new Array(sampleSize);
   const tpList: number[] = new Array(sampleSize);
+  const parallelDeltas: number[] = new Array(sampleSize);
 
   // Buffer for endpoints: [endX, endY, hitCode] for all N trials
   const endpoints = new Float32Array(sampleSize * 3);
@@ -88,18 +101,16 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
       sampleSteps
     );
 
-    let hitCode = 3; // miss
+    let hitCode = 2; // neutral
     if (res.hitType === 'primary') {
       primaryHits++;
       hitCode = 0;
     } else if (res.hitType === 'destructive') {
       destructiveCollisions++;
       hitCode = 1;
-    } else if (res.hitType === 'neutral') {
+    } else {
       neutralHits++;
       hitCode = 2;
-    } else {
-      totalMisses++;
     }
 
     endpoints[i * 3 + 0] = res.endX;
@@ -109,6 +120,7 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
     movementTimes[i] = res.movementTimeMs;
     idBitsList[i] = res.idBits;
     tpList[i] = res.throughputBitsPerSec;
+    parallelDeltas[i] = (res.endX - primaryCenter.x) * ux + (res.endY - primaryCenter.y) * uy;
 
     if (recordTraj && res.trajectory) {
       trajectoryLengths[i] = res.trajectory.length;
@@ -122,6 +134,13 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
   const destructiveWilsonCI = wilsonInterval(destructiveCollisions, sampleSize);
   const primaryWilsonCI = wilsonInterval(primaryHits, sampleSize);
 
+  // Effective Throughput computation: We = 4.133 * SD_parallel
+  const sdParallel = standardDeviation(parallelDeltas);
+  const we = sdParallel > 0 ? 4.133 * sdParallel : Math.max(1, primaryEl.rect.width);
+  const idEff = Math.log2(dist / we + 1);
+  const meanMT = mean(movementTimes);
+  const effectiveTP = (1000.0 * idEff) / Math.max(50, meanMT);
+
   const response: WorkerResponse = {
     sampleSize,
     seed,
@@ -129,12 +148,15 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
     primaryHits,
     destructiveCollisions,
     neutralHits,
-    totalMisses,
+    totalMisses: 0,
     destructiveWilsonCI,
     primaryWilsonCI,
-    meanMTMs: mean(movementTimes),
+    meanMTMs: meanMT,
     meanIDBits: mean(idBitsList),
     meanTPBitsPerSec: mean(tpList),
+    effectiveTPBitsPerSec: effectiveTP,
+    effectiveWidth: we,
+    sdParallel,
     endpoints,
     trajectorySamples: new Float32Array(samplePoints),
     trajectoryLengths

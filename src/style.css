@@ -10,8 +10,8 @@
   --border-prominent: #2D374D;
   
   --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
   
   --accent-emerald: #10B981;
   --accent-emerald-bg: rgba(16, 185, 129, 0.12);
@@ -248,13 +248,13 @@ body {
 
 .badge-pass {
   background: var(--accent-emerald-bg);
-  color: var(--accent-emerald);
+  color: #34D399;
   border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .badge-fail {
   background: var(--accent-crimson-bg);
-  color: var(--accent-crimson);
+  color: #FDA4AF;
   border: 1px solid rgba(244, 63, 94, 0.4);
 }
 
@@ -424,7 +424,7 @@ body {
 
 .select-dropdown {
   width: 100%;
-  min-height: 40px;
+  min-height: 44px;
   background: var(--bg-card);
   border: 1px solid var(--border-prominent);
   color: var(--text-primary);
@@ -516,13 +516,14 @@ body {
 }
 
 .btn-sample {
-  min-height: 34px;
+  min-height: 44px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -595,14 +596,15 @@ body {
 
 .toggle-btn {
   flex: 1;
-  min-height: 30px;
+  min-height: 40px;
   background: #0F1626;
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  font-size: 11px;
-  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 4px 6px;
+  padding: 6px 10px;
 }
 
 .toggle-btn.active {
@@ -737,8 +739,8 @@ body {
 }
 
 .btn-secondary {
-  min-height: 40px;
-  padding: 8px 16px;
+  min-height: 44px;
+  padding: 10px 18px;
   background: var(--bg-card);
   border: 1px solid var(--border-prominent);
   color: var(--text-primary);
@@ -750,8 +752,8 @@ body {
 }
 
 .btn-ghost {
-  min-height: 40px;
-  padding: 8px 16px;
+  min-height: 44px;
+  padding: 10px 18px;
   background: transparent;
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
@@ -1020,13 +1022,13 @@ body {
 }
 
 .btn-export {
-  min-height: 40px;
-  padding: 8px 14px;
+  min-height: 44px;
+  padding: 10px 16px;
   background: #0F1626;
   border: 1px solid var(--border-prominent);
   color: var(--text-primary);
   border-radius: 6px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -1090,4 +1092,24 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Global focus-visible indicator for keyboard accessibility (WCAG 2.4.7 / 2.4.11) */
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent-cyan) !important;
+  outline-offset: 2px !important;
+}
+
+/* Respect user's motion preferences (WCAG 2.3.3 Animation from Interactions) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .spinner {
+    animation: none !important;
+    display: none !important;
+  }
 }

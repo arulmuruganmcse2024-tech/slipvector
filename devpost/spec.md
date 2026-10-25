@@ -35,7 +35,7 @@ The main thread renders animated particles at 60 FPS on an HTML5 Canvas, present
 - **Runtime**: Modern web browser (Chrome, Edge, Firefox, Safari).
 - **Local Dev Server**: `npm run dev` (starts on `http://localhost:5173`).
 - **Production Build**: `npm run build && npm run preview`.
-- **Automated Tests**: `npm test` (executes the complete Vitest non-circular verification suite).
+- **Automated Tests**: `npm test` (executes the complete Vitest empirical verification suite).
 - **Deployment**: Static single-page application ready for Vercel, GitHub Pages, or Netlify via `vercel.json` or `.github/workflows/deploy.yml`.
 
 ## Look and Feel

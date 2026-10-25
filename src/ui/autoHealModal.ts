@@ -30,25 +30,40 @@ export function renderAutoHealSection(
       </div>
     `;
   } else if (solverResult) {
-    const isSolved = solverResult.status === 'solved';
-    const statusClass = isSolved ? 'badge-pass' : 'badge-infeasible';
-    const statusLabel = isSolved
-      ? '✓ SOLVED (Zero Collisions Certified)'
-      : '⚠ PARTIALLY MITIGATED (Infeasible in Bounds)';
+    let statusClass = 'badge-infeasible';
+    let statusLabel = '⚠ PARTIALLY MITIGATED (Infeasible in Bounds)';
 
+    if (solverResult.status === 'no_change_needed') {
+      statusClass = 'badge-pass';
+      statusLabel = '✓ NO CHANGE NEEDED (Baseline Meets Target)';
+    } else if (solverResult.status === 'solved') {
+      statusClass = 'badge-pass';
+      statusLabel = '✓ SOLVED (Zero Collisions Certified)';
+    }
+
+    const n = 500;
     const beforeText = formatWilsonCI(
       solverResult.beforeWilsonCI,
       solverResult.beforeCollisions,
-      500
+      n
     );
     const afterText = formatWilsonCI(
       solverResult.afterWilsonCI,
       solverResult.afterCollisions,
-      500
+      n
     );
 
+    const mtDisplay = Math.abs(solverResult.deltaMTMs) < 1
+      ? '0 ms (no change)'
+      : `${solverResult.deltaMTMs >= 0 ? '+' : ''}${Math.round(solverResult.deltaMTMs)} ms (${solverResult.beforeMTMs} -> ${solverResult.afterMTMs} ms)`;
+
+    const primBefore = ((solverResult.beforePrimaryHits / n) * 100).toFixed(1);
+    const primAfter = ((solverResult.afterPrimaryHits / n) * 100).toFixed(1);
+
+    const cardClass = solverResult.status === 'infeasible' ? 'infeasible' : 'solved';
+
     receiptHtml = `
-      <div class="autoheal-card receipt-card ${isSolved ? 'solved' : 'infeasible'}">
+      <div class="autoheal-card receipt-card ${cardClass}">
         <div class="receipt-header">
           <span class="badge ${statusClass}">${statusLabel}</span>
           <span class="receipt-title">Auto-Heal Verification Receipt</span>
@@ -61,15 +76,23 @@ export function renderAutoHealSection(
           </div>
           <div class="receipt-metric">
             <span class="metric-label">Hazard After Heal:</span>
-            <span class="metric-val ${isSolved ? 'text-emerald' : 'text-amber'}">${afterText}</span>
+            <span class="metric-val ${solverResult.afterCollisions === 0 ? 'text-emerald' : 'text-amber'}">${afterText}</span>
           </div>
           <div class="receipt-metric">
-            <span class="metric-label">Routine Time Impact:</span>
-            <span class="metric-val font-mono">${solverResult.deltaMTMs >= 0 ? '+' : ''}${Math.round(solverResult.deltaMTMs)} ms / click</span>
+            <span class="metric-label">Routine Movement Time:</span>
+            <span class="metric-val font-mono">${mtDisplay}</span>
           </div>
           <div class="receipt-metric">
-            <span class="metric-label">Touch Target Size:</span>
-            <span class="metric-val text-emerald">Expanded to ≥ 44px</span>
+            <span class="metric-label">Primary Hit Rate:</span>
+            <span class="metric-val font-mono text-emerald">${primBefore}% -> ${primAfter}%</span>
+          </div>
+          <div class="receipt-metric">
+            <span class="metric-label">Nominal Throughput:</span>
+            <span class="metric-val font-mono">${solverResult.beforeThroughput?.toFixed(2) ?? '—'} -> ${solverResult.afterThroughput?.toFixed(2) ?? '—'} bits/s</span>
+          </div>
+          <div class="receipt-metric">
+            <span class="metric-label">Effective TP (We=4.133·SD):</span>
+            <span class="metric-val font-mono">${solverResult.effectiveThroughputBefore?.toFixed(2) ?? '—'} -> ${solverResult.effectiveThroughputAfter?.toFixed(2) ?? '—'} bits/s</span>
           </div>
         </div>
 

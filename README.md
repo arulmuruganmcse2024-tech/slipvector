@@ -2,9 +2,10 @@
 
 > **Browser-Native Kinetic UI Misclick & Motor-Variability Stress Auditor**  
 > *Submitted to the Devpost "Build With AI: Basics" Hackathon*  
-> **Live Demo URL:** `https://slipvector.vercel.app` *(or run locally via `npm run preview`)*
+> **Live Demo URL:** `https://<your-live-deployment-url>.vercel.app` *(Production deployment: [slipvector.vercel.app](https://slipvector.vercel.app) or run locally via `npm run preview`)*
 
-[![Verification Status](https://img.shields.io/badge/Vitest-13%2F13%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
+[![Verification Status](https://img.shields.io/badge/Vitest-17%2F17%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
+[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-0%20Violations-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
 [![WCAG 2.2](https://img.shields.io/badge/WCAG%202.2-SC%202.5.8%20%7C%20SC%202.5.5-06B6D4?style=flat-square)](src/engine/staticChecks.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](LICENSE)
 
@@ -17,6 +18,7 @@
 - 📐 [**Technical Specification (`devpost/spec.md`)**](devpost/spec.md) • [Visual Spec (`devpost/spec.html`)](devpost/spec.html)
 - ✅ [**Build Checklist & Revision Log (`devpost/checklist.md`)**](devpost/checklist.md)
 - 🗺️ [**Interactive System App Map (`devpost/app-map.html`)**](devpost/app-map.html)
+- 🛡️ [**Self-Dogfooding Interface Audit (`docs/dogfood_audit.md`)**](docs/dogfood_audit.md)
 - ⚠️ [**Model Assumptions & Limitations (`docs/limitations.md`)**](docs/limitations.md)
 
 ---
@@ -94,6 +96,20 @@ When $k = 0$, SlipVector never claims "0% risk"; it displays `"0 / 500 collision
 
 ---
 
+## 📐 Parametric Assumptions Table
+
+| Parameter | Calibrated Value | Adjustment Range | Literature Basis & Scientific Rationale |
+| :--- | :--- | :--- | :--- |
+| **Aim Noise Base Constant ($k_{\text{aim}}$)** | **`0.026`** | Calibrated Baseline | **MacKenzie (1992)**, **Soukoreff & MacKenzie (2004)**. Calibrated to 4.26% error rate at $D=300\text{px}, W=40\text{px}$ (within 2%–8% empirical tolerance). |
+| **Directional Overshoot Ratio ($\rho_{\text{overshoot}} = \sigma_\parallel / \sigma_\perp$)** | **`1.5`** (Studio default) | `1.0` – `2.5` | **Meyer et al. (1988)**, **Schmidt et al. (1979)**. Longitudinal deceleration variability along approach axis $\hat{\mathbf{u}}$. |
+| **MacKenzie Fitts Constants ($a, b$)** | **$a = 160\text{ ms}, b = 130\text{ ms/bit}$** | Fixed Calibration | **MacKenzie (1992) Shannon Formulation**. Yields nominal Throughput $TP \in [3.0, 6.5]\text{ bits/s}$. |
+| **Effective Throughput Formulation** | **$W_e = 4.133 \cdot SD_\parallel$** | Standard (ISO 9241-9) | **Soukoreff & MacKenzie (2004)**. $ID_e = \log_2(D/W_e + 1)$, $TP_e = (1000 \cdot ID_e)/MT$. |
+| **Actuation Dwell Time ($t_{\text{dwell}}$)** | **`90 ms`** | `60` – `140 ms` | Mechanical switch actuation duration where tremor continues to displace pointer position. |
+| **Ornstein-Uhlenbeck Drift Rate ($\theta$)** | **`4.0 s⁻¹`** | Fixed Formulation | Mean-reverting stochastic process modeling neuromuscular correction around trajectory. |
+| **Tremor Oscillation Frequency ($f$)** | **`6.0 Hz`** | `4.0` – `8.0 Hz` | Typical kinetic/action tremor band from motor control and tremor biomechanics literature. |
+
+---
+
 ## 📊 Mitigation Trade-Off Matrix
 
 | Mitigation Pattern | Residual Hazard ($k/N$ + Wilson 95% CI) | Added Routine Time | Recovery Friction | Recommended Use Case |
@@ -109,13 +125,13 @@ When $k = 0$, SlipVector never claims "0% risk"; it displays `"0 / 500 collision
 
 ```bash
 # Clone the repository
-git clone https://github.com/ArulMurugan2905/slipvector.git
+git clone https://github.com/slipvector/slipvector.git
 cd slipvector
 
 # Install dependencies
-npm install
+npm ci
 
-# Run automated verification suite (13 non-circular tests)
+# Run automated test suites (17 Vitest unit & integration tests + Playwright E2E a11y)
 npm test
 
 # Build production bundle
@@ -132,11 +148,18 @@ Open `http://localhost:4173/` in your browser.
 ## 📚 References
 
 1. **Fitts, P. M. (1954)**. *The information capacity of the human motor system in controlling the amplitude of movement*. Journal of Experimental Psychology, 47(6), 381–391.
-2. **Schmidt, R. A., Zelaznik, H., Hawkins, B., Frank, J. S., & Quinn, J. T. (1979)**. *Motor-output variability: A theory for the accuracy of rapid motor acts*. Psychological Review, 86(5), 415–451.
-3. **Meyer, D. E., Abrams, R. A., Kornblum, S., Wright, C. E., & Smith, J. E. (1988)**. *Optimality in human motor performance: Ideal rapidly aimed movements, alternative mechanisms, and new models*. Psychological Review, 95(3), 340–370.
-4. **MacKenzie, I. S. (1992)**. *Fitts' law as a research and design tool in human-computer interaction*. Human-Computer Interaction, 7(1), 91–139.
-5. **Wilson, E. B. (1927)**. *Probable inference, the law of bias, and the log of the odds*. Journal of the American Statistical Association, 22(158), 209–212.
+2. **Meyer, D. E., Abrams, R. A., Kornblum, S., Wright, C. E., & Smith, J. E. (1988)**. *Optimality in human motor performance: Ideal rapidly aimed movements, alternative mechanisms, and new models*. Psychological Review, 95(3), 340–370.
+3. **MacKenzie, I. S. (1992)**. *Fitts' law as a research and design tool in human-computer interaction*. Human-Computer Interaction, 7(1), 91–139.
+4. **Soukoreff, R. W., & MacKenzie, I. S. (2004)**. *Towards a standard for pointing device evaluation, perspectives on 27 years of Fitts' law research in HCI*. International Journal of Human-Computer Studies, 61(6), 751–789.
+5. **Schmidt, R. A., Zelaznik, H., Hawkins, B., Frank, J. S., & Quinn, J. T. (1979)**. *Motor-output variability: A theory for the accuracy of rapid motor acts*. Psychological Review, 86(5), 415–451.
+6. **Wilson, E. B. (1927)**. *Probable inference, the law of bias, and the log of the odds*. Journal of the American Statistical Association, 22(158), 209–212.
 
 ---
 
-> **Non-Clinical Disclaimer**: Model-based ergonomic screening tool using parametric pointing models; not a clinical diagnostic instrument or a substitute for usability testing with human participants.
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+> **Non-Clinical Disclaimer**: SlipVector is a model-based ergonomic screening tool using parametric pointing models; not a clinical diagnostic instrument or a substitute for usability testing with human participants.

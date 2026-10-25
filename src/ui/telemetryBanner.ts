@@ -2,6 +2,8 @@
  * Telemetry Banner Component
  * Displays side-by-side static accessibility compliance badges and
  * live empirical kinetic Monte Carlo simulation metrics with Wilson 95% CIs.
+ * Reports both Nominal Throughput and Effective Throughput (We = 4.133 * SD),
+ * and verifies Primary + Destructive + Neutral partition sums to N.
  */
 
 import { StaticAuditResult } from '../engine/staticChecks.ts';
@@ -33,9 +35,11 @@ export function renderTelemetryBanner(
     const n = simResult.sampleSize;
     const ci = simResult.destructiveWilsonCI;
     const dur = simResult.durationMs.toFixed(1);
-    const tp = simResult.meanTPBitsPerSec.toFixed(2);
+    const tpNominal = simResult.meanTPBitsPerSec.toFixed(2);
+    const tpEffective = (simResult.effectiveTPBitsPerSec ?? simResult.meanTPBitsPerSec).toFixed(2);
     const mt = Math.round(simResult.meanMTMs);
     const id = simResult.meanIDBits.toFixed(2);
+    const neutral = simResult.neutralHits ?? (n - simResult.primaryHits - k);
 
     const collisionSeverity = k === 0 ? 'safe' : k / n < 0.05 ? 'warning' : 'critical';
 
@@ -53,10 +57,16 @@ export function renderTelemetryBanner(
           <strong>Wilson 95% CI:</strong> [${(ci.lower * 100).toFixed(2)}%, ${(ci.upper * 100).toFixed(2)}%]
         </div>
         <div class="telemetry-fitts-row">
-          <span><strong>Throughput:</strong> ${tp} bits/s</span>
+          <span><strong>Nominal TP:</strong> ${tpNominal} bits/s</span>
+          <span><strong>Effective TP (We=4.133·SD):</strong> ${tpEffective} bits/s</span>
           <span><strong>MT:</strong> ${mt} ms</span>
           <span><strong>ID:</strong> ${id} bits</span>
-          <span><strong>Primary Hits:</strong> ${simResult.primaryHits} / ${n} (${(simResult.primaryWilsonCI.proportion * 100).toFixed(1)}%)</span>
+        </div>
+        <div class="telemetry-fitts-row">
+          <span><strong>Primary:</strong> ${simResult.primaryHits} (${((simResult.primaryHits / n) * 100).toFixed(1)}%)</span>
+          <span><strong>Destructive:</strong> ${k} (${((k / n) * 100).toFixed(1)}%)</span>
+          <span><strong>Neutral:</strong> ${neutral} (${((neutral / n) * 100).toFixed(1)}%)</span>
+          <span><strong>Sum:</strong> ${simResult.primaryHits + k + neutral} / ${n} (100%)</span>
         </div>
       </div>
     `;

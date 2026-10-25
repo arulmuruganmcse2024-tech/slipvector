@@ -90,8 +90,8 @@ export function renderControlDeck(
             <span class="badge-assumption">Model Assumption</span>
             <span class="slider-value font-mono" id="val-overshoot">${currentProfile.overshootRatio.toFixed(2)}x</span>
           </div>
-          <input type="range" id="slider-overshoot" min="1.0" max="2.5" step="0.05" value="${currentProfile.overshootRatio}" class="range-slider" />
-          <div class="slider-subtext">Directional dispersion along approach vector $\\hat{\\mathbf{u}}$</div>
+          <input type="range" id="slider-overshoot" aria-label="Directional Overshoot Ratio" min="1.0" max="2.5" step="0.05" value="${currentProfile.overshootRatio}" class="range-slider" />
+          <div class="slider-subtext">Directional dispersion along approach vector $\hat{\mathbf{u}}$</div>
         </div>
 
         <!-- Oscillation Frequency -->
@@ -100,7 +100,7 @@ export function renderControlDeck(
             <span>Tremor Frequency</span>
             <span class="slider-value font-mono" id="val-frequency">${currentProfile.frequency.toFixed(1)} Hz</span>
           </div>
-          <input type="range" id="slider-frequency" min="0" max="10" step="0.5" value="${currentProfile.frequency}" class="range-slider" />
+          <input type="range" id="slider-frequency" aria-label="Tremor Frequency" min="0" max="10" step="0.5" value="${currentProfile.frequency}" class="range-slider" />
         </div>
 
         <!-- Oscillation Amplitude -->
@@ -109,7 +109,7 @@ export function renderControlDeck(
             <span>Tremor Amplitude</span>
             <span class="slider-value font-mono" id="val-amplitude">${currentProfile.amplitude.toFixed(1)} px</span>
           </div>
-          <input type="range" id="slider-amplitude" min="0" max="25" step="0.5" value="${currentProfile.amplitude}" class="range-slider" />
+          <input type="range" id="slider-amplitude" aria-label="Tremor Amplitude" min="0" max="25" step="0.5" value="${currentProfile.amplitude}" class="range-slider" />
         </div>
 
         <!-- Transit Jerk / Jolt -->
@@ -118,7 +118,7 @@ export function renderControlDeck(
             <span>Transit Jerk / Jolt</span>
             <span class="slider-value font-mono" id="val-jerk">${currentProfile.jerkImpulse.toFixed(1)} px</span>
           </div>
-          <input type="range" id="slider-jerk" min="0" max="15" step="0.5" value="${currentProfile.jerkImpulse}" class="range-slider" />
+          <input type="range" id="slider-jerk" aria-label="Transit Jerk or Jolt" min="0" max="15" step="0.5" value="${currentProfile.jerkImpulse}" class="range-slider" />
         </div>
 
         <!-- Movement Urgency -->
@@ -127,7 +127,7 @@ export function renderControlDeck(
             <span>Movement Urgency</span>
             <span class="slider-value font-mono" id="val-urgency">${currentProfile.urgency.toFixed(2)}x</span>
           </div>
-          <input type="range" id="slider-urgency" min="0.6" max="2.0" step="0.05" value="${currentProfile.urgency}" class="range-slider" />
+          <input type="range" id="slider-urgency" aria-label="Movement Urgency" min="0.6" max="2.0" step="0.05" value="${currentProfile.urgency}" class="range-slider" />
         </div>
       </div>
 
@@ -137,20 +137,20 @@ export function renderControlDeck(
           <div class="panel-section-title">Selected Element: <strong>${selectedEl.label}</strong></div>
           <div class="geom-grid">
             <div class="geom-field">
-              <label>X (px)</label>
-              <input type="number" id="inp-geom-x" value="${selectedEl.rect.x}" class="inp-num" />
+              <label for="inp-geom-x">X (px)</label>
+              <input type="number" id="inp-geom-x" aria-label="Selected element X coordinate in pixels" value="${selectedEl.rect.x}" class="inp-num" />
             </div>
             <div class="geom-field">
-              <label>Y (px)</label>
-              <input type="number" id="inp-geom-y" value="${selectedEl.rect.y}" class="inp-num" />
+              <label for="inp-geom-y">Y (px)</label>
+              <input type="number" id="inp-geom-y" aria-label="Selected element Y coordinate in pixels" value="${selectedEl.rect.y}" class="inp-num" />
             </div>
             <div class="geom-field">
-              <label>W (px)</label>
-              <input type="number" id="inp-geom-w" value="${selectedEl.rect.width}" class="inp-num" />
+              <label for="inp-geom-w">W (px)</label>
+              <input type="number" id="inp-geom-w" aria-label="Selected element width in pixels" value="${selectedEl.rect.width}" class="inp-num" />
             </div>
             <div class="geom-field">
-              <label>H (px)</label>
-              <input type="number" id="inp-geom-h" value="${selectedEl.rect.height}" class="inp-num" />
+              <label for="inp-geom-h">H (px)</label>
+              <input type="number" id="inp-geom-h" aria-label="Selected element height in pixels" value="${selectedEl.rect.height}" class="inp-num" />
             </div>
           </div>
           <div class="geom-role-tag">Role: <span class="tag-${selectedEl.role}">${selectedEl.role.toUpperCase()}</span></div>

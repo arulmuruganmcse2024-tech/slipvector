@@ -48,7 +48,7 @@ export function renderMitigationTable(
         <span class="matrix-subtitle">Empirical Trade-off Comparison</span>
       </div>
 
-      <div class="table-scroll-wrapper">
+      <div class="table-scroll-wrapper" tabindex="0" role="region" aria-label="Mitigation trade-off matrix">
         <table class="mitigation-table">
           <thead>
             <tr>

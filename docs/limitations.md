@@ -11,11 +11,22 @@ SlipVector grounds its kinetic simulation on published human-computer interactio
 
 | Parameter | Default Value | Parameter Range | Scientific Rationale & Source |
 | :--- | :--- | :--- | :--- |
+| **Aim Noise Base Constant ($k_{\text{aim}}$)** | **`0.026`** | Calibrated Baseline | Retuned from initial exploratory value (0.055). Grounded in **MacKenzie (1992)** and **Soukoreff & MacKenzie (2004)** empirical error rate benchmarks. At $D \approx 300\text{px}$ on a $40\text{px}$ target with steady hand ($\rho = 1.2$), yields an empirical endpoint error rate of $4.26\%$ (within published experimental tolerance of $2\% - 8\%$). |
 | **Directional Overshoot Ratio ($\rho_{\text{overshoot}} = \sigma_\parallel / \sigma_\perp$)** | **`1.5`** | `1.0` – `2.5` | Modeled after **Meyer et al. (1988)** and **Schmidt et al. (1979)** impulse variability. Along the ballistic approach vector $\hat{\mathbf{u}}$, deceleration and braking force variability produce greater longitudinal scatter than lateral perpendicular scatter. |
-| **MacKenzie Fitts Constants ($a, b$)** | **$a = 160\text{ms}, b = 130\text{ms/bit}$** | Fixed Calibration | Evaluated via **MacKenzie's (1992) Shannon Formulation** $ID = \log_2(D/W + 1)$ and $MT = a + b \cdot ID$. Yields Throughput $TP \in [3.0, 6.5]\text{ bits/s}$ matching empirical mouse pointing studies. |
+| **MacKenzie Fitts Constants ($a, b$)** | **$a = 160\text{ms}, b = 130\text{ms/bit}$** | Fixed Calibration | Evaluated via **MacKenzie's (1992) Shannon Formulation** $ID = \log_2(D/W + 1)$ and $MT = a + b \cdot ID$. Yields Nominal Throughput $TP \in [3.0, 6.5]\text{ bits/s}$ and Effective Throughput $TP_e = (1000 \cdot ID_e) / MT$ with $W_e = 4.133 \cdot SD_\parallel$ (ISO 9241-9). |
 | **Actuation Dwell Time ($t_{\text{dwell}}$)** | **`90 ms`** | `60` – `140 ms` | The mechanical duration during which a mouse switch is depressed or a fingertip makes surface contact before release. Hand tremor continues oscillating during dwell. |
 | **Ornstein-Uhlenbeck Drift Rate ($\theta$)** | **`4.0 s⁻¹`** | Fixed Formulation | Mean-reverting stochastic process modeling continuous involuntary neuromuscular drift around the intended ballistic path. |
 | **Tremor Oscillation Band ($f$)** | **`6.0 Hz`** | `4.0` – `8.0 Hz` | Typical kinetic/action tremor band observed in physiological tremor and essential-tremor motor variability literature. |
+
+### 1.1 Error-Rate Calibration & Noise Retuning
+In early uncalibrated prototypes, an aim noise coefficient $k_{\text{aim}} = 0.055$ produced $40\% - 55\%$ neutral miss rates even for steady-hand baselines targeting standard controls, which contradicts empirical literature. As established by **MacKenzie (1992)** and **Soukoreff & MacKenzie (2004)**, healthy adult users aiming at moderate index of difficulty ($D \approx 300\text{px}, W = 40\text{px}$, $ID \approx 3.09\text{ bits}$) exhibit an average endpoint error rate near $4\%$ (typical experimental tolerance: $2\% - 8\%$).
+
+Retuning $k_{\text{aim}}$ to $0.026$ produces $\sigma_\parallel = 9.36\text{px}$ and $\sigma_\perp = 7.80\text{px}$, producing an empirical hit rate of $95.74\%$ and error rate of $4.26\%$ on a $40\text{px}$ target at $D = 300\text{px}$.
+
+### 1.2 Strict Partition Invariant
+Every simulated pointer trial terminates in one of three mutually exclusive outcomes:
+$$\text{Sample Size } (N) = \text{Primary Hits } (P) + \text{Destructive Collisions } (D) + \text{Neutral Misses } (M)$$
+No trial is double-counted or lost. This partition is enforced across all presets and sample sizes ($500$, $2,000$, and $10,000$).
 
 ---
 
@@ -54,4 +65,5 @@ The following boundaries were intentionally selected for this proof-of-concept i
 2. **Schmidt, R. A., Zelaznik, H., Hawkins, B., Frank, J. S., & Quinn, J. T. (1979)**. *Motor-output variability: A theory for the accuracy of rapid motor acts*. Psychological Review, 86(5), 415–451.
 3. **Meyer, D. E., Abrams, R. A., Kornblum, S., Wright, C. E., & Smith, J. E. (1988)**. *Optimality in human motor performance: Ideal rapidly aimed movements, alternative mechanisms, and new models*. Psychological Review, 95(3), 340–370.
 4. **MacKenzie, I. S. (1992)**. *Fitts' law as a research and design tool in human-computer interaction*. Human-Computer Interaction, 7(1), 91–139.
-5. **Wilson, E. B. (1927)**. *Probable inference, the law of bias, and the log of the odds*. Journal of the American Statistical Association, 22(158), 209–212.
+5. **Soukoreff, R. W., & MacKenzie, I. S. (2004)**. *Towards a standard for pointing device evaluation, perspectives on 27 years of Fitts' law research in HCI*. International Journal of Human-Computer Studies, 61(6), 751–789.
+6. **Wilson, E. B. (1927)**. *Probable inference, the law of bias, and the log of the odds*. Journal of the American Statistical Association, 22(158), 209–212.

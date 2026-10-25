@@ -6,7 +6,7 @@
  * Complies with WCAG 2.3.1 (zero flashing) and respects prefers-reduced-motion.
  */
 
-import { UIElement, MotorProfile, rectCenter } from '../engine/biomechanics.ts';
+import { UIElement, MotorProfile, rectCenter, AIM_NOISE_K } from '../engine/biomechanics.ts';
 import { WorkerResponse } from '../worker/simWorker.ts';
 import { renderGaussianHeatmap } from './heatmap.ts';
 
@@ -215,7 +215,7 @@ export class SwarmRenderer {
     // Covariance 2-sigma ellipse around primary
     const urgency = this.profile ? this.profile.urgency : 1.0;
     const overshoot = this.profile ? this.profile.overshootRatio : 1.5;
-    const sigmaPerp = 0.055 * dist * urgency;
+    const sigmaPerp = AIM_NOISE_K * dist * urgency;
     const sigmaPar = overshoot * sigmaPerp;
 
     const semiMajor = Math.max(8, 2 * sigmaPar);

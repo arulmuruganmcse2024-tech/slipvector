@@ -10,7 +10,7 @@ Build mode: fast
 
 ## Slices
 
-- [x] **1. Biomechanical Engine, Wilson CI Statistics, Static WCAG Evaluator & Non-Circular Test Suite**
+- [x] **1. Biomechanical Engine, Wilson CI Statistics, Static WCAG Evaluator & Empirical Verification Test Suite**
   Becomes usable: Complete pure-math and biomechanical calculation core executing Shannon Fitts Law, Meyer impulse noise, Ornstein-Uhlenbeck continuous tremor, Wilson 95% Confidence Intervals, static WCAG target size checks, and calibrated Throughput ($TP \in [3.0, 6.5]\text{ bits/s}$), fully verified by an automated Vitest test suite.
   Why now: The entire validity and non-negotiable integrity rules of SlipVector rest on scientific mathematical truth; if the biomechanical engine or statistics are flawed, every downstream visual component will be untruthful.
   PRD ref: `prd.md > Features and Behavior > FR4, FR6, FR7`
@@ -52,7 +52,7 @@ Build mode: fast
 - [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
 - [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: Biomechanical simulation engine with non-circular empirical tests and interactive stress testing workbench.
+Activity and evidence: Biomechanical simulation engine with empirical verification tests and interactive stress testing workbench.
 Route and stops: `src/engine/biomechanics.ts` -> `src/engine/solver.ts` -> `src/canvas/swarmRenderer.ts` -> `src/import/htmlExtractor.ts`.
 Edit outcome: not applicable yet
 Reflection: offered
