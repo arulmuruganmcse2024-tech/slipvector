@@ -1,14 +1,21 @@
 # ⚡ SlipVector
 
-> **Browser-Native Kinetic UI Misclick & Motor-Variability Stress Auditor**  
-> *Submitted to the Devpost "Build With AI: Basics" Hackathon*  
-> **Live Demo URL:** [https://arulmuruganmcse2024-tech.github.io/slipvector/](https://arulmuruganmcse2024-tech.github.io/slipvector/) *(or run locally via `npm run preview`)*
+### **Kinetic UI Misclick & Motor-Variability Stress Auditor**
+*Submitted to the Devpost **Build With AI: Basics** Hackathon (March 2026)*
+
+[![🚀 Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Try%20SlipVector%20Online-06B6D4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://arulmuruganmcse2024-tech.github.io/slipvector/)
+[![Devpost Hackathon](https://img.shields.io/badge/Devpost-Build%20With%20AI%3A%20Basics-003B5C?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 [![Verification Status](https://img.shields.io/badge/Vitest-22%2F22%20Passing-10B981?style=flat-square&logo=vitest)](tests/engine.test.ts)
 [![Playwright E2E](https://img.shields.io/badge/Playwright-18%2F18%20Passing-10B981?style=flat-square&logo=playwright)](tests/buttons.spec.ts)
-[![Axe Accessibility](https://img.shields.io/badge/Axe--Core-100%2F100%20Accessibility-10B981?style=flat-square&logo=axe)](tests/a11y.spec.ts)
+[![Lighthouse Accessibility](https://img.shields.io/badge/Lighthouse-100%2F100%20A11y-10B981?style=flat-square&logo=lighthouse)](docs/audit/lighthouse.md)
+[![Zero Blocking Time](https://img.shields.io/badge/TBT-0ms%20(Web%20Worker)-6366F1?style=flat-square)](docs/audit/lighthouse.md)
 [![WCAG 2.2](https://img.shields.io/badge/WCAG%202.2-SC%202.5.8%20%7C%20SC%202.5.5-06B6D4?style=flat-square)](src/engine/staticChecks.ts)
-[![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](LICENSE)
+
+> 🌐 **Live Web Application:** **[https://arulmuruganmcse2024-tech.github.io/slipvector/](https://arulmuruganmcse2024-tech.github.io/slipvector/)**  
+> 💻 **Run Locally:** `git clone https://github.com/arulmuruganmcse2024-tech/slipvector.git && npm ci && npm run preview`  
+> 🏆 **Hackathon Category:** Build With AI: Basics — Web Applications & Developer Tooling
 
 ---
 
